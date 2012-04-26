@@ -1,4 +1,2 @@
-VolumeOne
-=========
-
-Source code for OpenGL Insights
+OpenGL Insights Source Code
+===========================
