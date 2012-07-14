@@ -1,0 +1,84 @@
+{
+	"geometries":
+	[
+		{
+			"name"      : "crate",
+			"file"      : "crate0.obj",
+			"folder"    : "crate",
+			"translate" : [0, 0, 1.3],
+			"rotate"    : [0, 0, 0],
+			"scale"     : 0.1
+		},
+
+		{
+			"name"      : "crate",
+			"file"      : "crate1.obj",
+			"folder"    : "crate",
+			"translate" : [5, 0, 1.3],
+			"rotate"    : [0, 0, 0],
+			"scale"     : 0.1
+		},
+
+		{
+			"name"      : "crate",
+			"file"      : "crate2.obj",
+			"folder"    : "crate",
+			"translate" : [10, 0, 1.2],
+			"rotate"    : [0, 0, 90],
+			"scale"     : 0.1
+		},
+
+		{
+			"name"      : "crate",
+			"file"      : "crate3.obj",
+			"folder"    : "crate",
+			"translate" : [15, 0, 0.5],
+			"rotate"    : [0, 0, 90],
+			"scale"     : 0.1
+		},
+
+		{
+			"name"      : "crate",
+			"file"      : "crate4.obj",
+			"folder"    : "crate",
+			"translate" : [20, 0, 0.3],
+			"rotate"    : [0, 0, 90],
+			"scale"     : 0.1
+		},
+
+		{
+			"name"      : "crate",
+			"file"      : "crate5.obj",
+			"folder"    : "crate",
+			"translate" : [25, 0, 0.2],
+			"rotate"    : [0, 0, 90],
+			"scale"     : 0.1
+		},
+
+		{
+			"name"      : "ground",
+			"file"      : "quad.obj",
+			"folder"    : "basics",
+			"translate" : [0, 0, 0],
+			"rotate"    : [0, 0, 0],
+			"scale"     : 50
+		}
+	],
+
+	"lights":
+	[
+		{
+			"name"      : "sun",
+			"type"      : "point",
+			"intensity" : [0, 0, 0]
+		}
+	],
+
+	"camera":
+	{
+		"position"    : [0, 0, 0],
+		"target"      : [0, 0, 0],
+		"type"        : "orbit"
+	}
+}
+

@@ -1,0 +1,343 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  Deep Exploration 6.0 6.0.0.5908 Release
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Material__33
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 22.6274
+map_Kd Pilot2_t.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__44
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 27.8576
+map_Kd cockpit_shell_point_guns.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__25
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 21.1121
+map_Kd main_body.jpg
+map_bump main_body_N.jpg
+bump main_body_N.jpg
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__36
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 16
+map_Kd blk_C.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__34
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 27.8576
+map_Kd generic_C.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__38
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 14.9285
+map_Kd basic3.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__39
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 10.5561
+map_Kd panels2.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__43
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 14.9285
+map_Kd red_C.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__40
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 14.9285
+map_Kd green_C.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__32
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 8.57419
+map_Kd basic.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__41
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 27.8576
+map_Kd gunner_dialls.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__42
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 19.6983
+map_Kd pilot_dials.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__26
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 17.1484
+map_Kd intake_tail.jpg
+map_bump intake_tail_N.jpg
+bump intake_tail_N.jpg
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__27
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 19.6983
+map_Kd landing_accesories.jpg
+map_bump landing_accesories_N.jpg
+bump landing_accesories_N.jpg
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__28
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 13.9288
+map_Kd guns_t.jpg
+map_bump guns_N.jpg
+bump guns_N.jpg
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__29
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 13.9288
+map_Kd props_hardware.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__30
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 19.6983
+map_Kd basic2.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__31
+Ka 0.00784314 0.0509804 0.0784314
+Kd 0.00784314 0.0509804 0.0784314
+Ks 0.9 0.9 0.9
+illum 2
+Ns 17.1484
+d 0.4
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__45
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 21.1121
+map_Kd Lens_T.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__35
+Ka 0.588 0.588 0.588
+Kd 0.588 0.588 0.588
+Ks 0.9 0.9 0.9
+illum 2
+Ns 21.1121
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__37
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 27.8576
+map_Kd Pilot1_t.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 

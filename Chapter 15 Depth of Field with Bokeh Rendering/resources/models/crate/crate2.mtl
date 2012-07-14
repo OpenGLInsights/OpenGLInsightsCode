@@ -1,0 +1,16 @@
+# 3ds Max Wavefront OBJ Exporter v0.94b - (c)2007 guruware
+# File Created: 02.06.2008 23:10:26
+
+newmtl mymat
+Ni 1.5000
+Ns 25.9921
+d 1.0000
+Tr 1.0000
+Tf 1.0000 1.0000 1.0000 
+illum 2
+Ka 0.0000 0.0000 0.0000
+Kd 0.5882 0.5882 0.5882
+Ks 0.9 0.9 0.9
+map_Kd crtlng.jpg
+map_Ks crtlng.jpg
+

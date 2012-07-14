@@ -1,0 +1,39 @@
+{
+	"geometries":
+	[
+		{
+			"name"      : "cobra",
+			"file"      : "cobra.obj",
+			"folder"    : "cobra",
+			"translate" : [0, 0, 2],
+			"rotate"    : [0, 0, 0],
+			"scale"     : 1
+		},
+
+		{
+			"name"      : "ground",
+			"file"      : "quad.obj",
+			"folder"    : "basics",
+			"translate" : [0, 0, 0],
+			"rotate"    : [0, 0, 0],
+			"scale"     : 50
+		}
+	],
+
+	"lights":
+	[
+		{
+			"name"      : "sun",
+			"type"      : "point",
+			"intensity" : [0, 0, 0]
+		}
+	],
+
+	"camera":
+	{
+		"position"    : [0, 0, 0],
+		"target"      : [0, 0, 0],
+		"type"        : "orbit"
+	}
+}
+

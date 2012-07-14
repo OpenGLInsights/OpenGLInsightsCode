@@ -1,0 +1,46 @@
+# 3ds Max Wavefront OBJ Exporter v0.94b - (c)2007 guruware
+# File Created: 02.06.2008 23:10:26
+
+newmtl wire_229166215
+	Ns 32
+	d 1
+	Tr 1
+	Tf 1 1 1
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.8980 0.6510 0.8431
+	Ks 0.3500 0.3500 0.3500
+
+newmtl Side
+	Ns 32.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5882 0.5882 0.5882
+	Ks 0.4500 0.4500 0.4500
+	Ke 0.0000 0.0000 0.0000
+	map_Ka barrel.jpg
+	map_Kd barrel.jpg
+	map_Ks barrel_opacity.jpg
+	map_d barrel_opacity.jpg
+	map_bump barrel_bump.jpg
+	bump barrel_bump.jpg
+
+newmtl Top
+	Ns 32.0000
+	Ni 1.5000
+	d 1.0000
+	Tr 1.0000
+	Tf 1.0000 1.0000 1.0000 
+	illum 2
+	Ka 0.0000 0.0000 0.0000
+	Kd 0.5880 0.5880 0.5880
+	Ks 0.4500 0.4500 0.4500
+	Ke 0.0000 0.0000 0.0000
+	map_Ka barrel_top.jpg
+	map_Kd barrel_top.jpg
+	map_bump barrel_top_barrel.jpg
+	bump barrel_top_barrel.jpg

@@ -1,0 +1,76 @@
+{
+	"geometries":
+	[
+		{
+			"name"      : "cobra",
+			"file"      : "cobra.obj",
+			"folder"    : "cobra",
+			"translate" : [-4, -18, 2.9],
+			"rotate"    : [0, 0, -65],
+			"scale"     : 1
+		},
+
+		{
+			"name"      : "uh60",
+			"file"      : "uh60.obj",
+			"folder"    : "uh60",
+			"translate" : [16, 12, 2],
+			"rotate"    : [1, 0, 10],
+			"scale"     : 1
+		},
+
+		{
+			"name"      : "ground",
+			"file"      : "quad.obj",
+			"folder"    : "basics",
+			"translate" : [0, 0, 0],
+			"rotate"    : [0, 0, 0],
+			"scale"     : 50
+		}
+	],
+
+	"terrains":
+	[
+		{
+			"name"      : "terrain",
+			"diffuse"   : "terrainDiffuse2.png",
+			"height"    : "terrainHeight2.png",
+			"terrainSize"  : [50, 50],
+			"terrainOffset": [-25, -25, 0],
+			"heightFactor": 1.8556,
+			"tileFactor": 10,
+			"roughness" : 0.2,
+			"specularity": 0.01
+		},
+
+		{
+			"name"      : "terrain",
+			"diffuse"   : "terrainDiffuse.png",
+			"height"    : "terrainHeight.png",
+			"terrainSize"  : [50, 50],
+			"terrainOffset": [-25, -25, 0],
+			"heightFactor": 6.0824,
+			"tileFactor": 1,
+			"roughness" : 0.2,
+			"specularity": 0.01
+		}
+
+	],
+
+	"lights":
+	[
+		{
+			"name"      : "sun",
+			"type"      : "point",
+			"intensity" : [0, 0, 0]
+		}
+	],
+
+	"camera":
+	{
+		"position"    : [0, 0, 0],
+		"target"      : [0, 0, 0],
+		"type"        : "orbit"
+	}
+}
+

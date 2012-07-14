@@ -1,0 +1,54 @@
+{
+	"geometries":
+	[
+		{
+			"name"      : "tank",
+			"file"      : "tank.obj",
+			"folder"    : "tank",
+			"translate" : [0, 0, 0],
+			"rotate"    : [90, 0, 0],
+			"scale"     : 1
+		},
+
+		{
+			"name"      : "sphere",
+			"file"      : "sphere.obj",
+			"folder"    : "basics",
+			"translate" : [0, 0, 5],
+			"rotate"    : [0, 0, 0],
+			"scale"     : 1
+		}
+	],
+
+	"terrains":
+	[
+		{
+			"name"      : "terrain",
+			"diffuse"   : "terrainDiffuse.png",
+			"height"    : "terrainHeight.png",
+			"terrainSize"  : [50, 50],
+			"terrainOffset": [-25, -25, 0],
+			"heightFactor" : 10,
+			"tileFactor"   : 1,
+			"roughness"    : 0.1,
+			"specularity"  : 0.5
+		}
+	],
+
+	"lights":
+	[
+		{
+			"name"      : "tank",
+			"type"      : "point",
+			"intensity" : [0, 0, 0]
+		}
+	],
+
+	"camera":
+	{
+		"position"    : [0, 0, 0],
+		"target"      : [0, 0, 0],
+		"type"        : "orbit"
+	}
+}
+

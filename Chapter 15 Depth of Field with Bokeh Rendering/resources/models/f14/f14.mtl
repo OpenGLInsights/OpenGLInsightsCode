@@ -1,0 +1,327 @@
+# 
+# Wavefront material file
+# Converted by the DEEP Exploration  Deep Exploration 6.0 6.0.0.5908 Release
+# Right Hemisphere, LTD
+# http://www.righthemisphere.com/
+# 
+
+newmtl Material__44
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 25.9921
+map_Kd f14landinggear.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__26
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 19.6983
+map_Kd f14fuselage_lower.jpg
+map_bump f14fuselage_lower_Normal.jpg
+bump f14fuselage_lower_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14fuselage_lower_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__27
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 27.8576
+map_Kd f14intakes_misc.jpg
+map_bump f14intakes_misc_Normal.jpg
+bump f14intakes_misc_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14intakes_misc_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__29
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 29.8571
+map_Kd f14_wing_2.jpg
+map_bump f14_wing_2_Normal.jpg
+bump f14_wing_2_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14_wing_2_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__38
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 59.7141
+map_Kd f14d_burner.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__28
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 29.8571
+map_Kd f14_wing_1.jpg
+map_bump f14_wing_1_Normal.jpg
+bump f14_wing_1_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14_wing_1_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl _1___Default
+Ka 0.588 0.588 0.588
+Kd 0.588 0.588 0.588
+Ks 0.9 0.9 0.9
+illum 2
+Ns 24.2515
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__39
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 21.1121
+map_Kd f14taileron_lt.jpg
+map_bump f14taileron_lt_Normal.jpg
+bump f14taileron_lt_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14taileron_lt_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__40
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 18.3792
+map_Kd f14taileron_rt.jpg
+map_bump f14taileron_rt_Normal.jpg
+bump f14taileron_rt_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14taileron_rt_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__25
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 24.2515
+map_Kd f14fuselage.jpg
+map_bump f14fuselage_Normal.jpg
+bump f14fuselage_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14fuselage_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__37
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 22.6274
+map_Kd Pilota_militare.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__43
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 45.2548
+map_Kd f14engine.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__31
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 18.3792
+map_Kd f14_stores.jpg
+map_bump f14d_stores_Normal.jpg
+bump f14d_stores_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__30
+Ka 0.482353 0.52549 0.54902
+Kd 0.482353 0.52549 0.54902
+Ks 0.9 0.9 0.9
+illum 2
+Ns 29.8571
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__32
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 21.1121
+map_Kd f14canopy.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS f14canopy_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__42
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 32
+map_Kd f14tail_rt.jpg
+map_bump f14taileron_rt_Normal.jpg
+bump f14taileron_rt_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14tail_rt_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__41
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 1 1 1
+illum 2
+Ns 14.9285
+map_Kd f14tail_lt.jpg
+map_bump f14tail_lt_Normal.jpg
+bump f14tail_lt_Normal.jpg
+map_opacity 
+map_d 
+refl 
+map_kS f14tail_lt_spec.jpg
+map_kA 
+map_Ns 
+
+newmtl Material__33
+Ka 0.00784314 0.0705882 0.0980392
+Kd 0.00784314 0.0705882 0.0980392
+Ks 0.9 0.9 0.9
+illum 2
+Ns 19.6983
+d 0.38
+map_Kd 
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__34
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 25.9921
+map_Kd f14interior_detail.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
+
+newmtl Material__36
+Ka 0.588 0.588 0.588
+Kd 1 1 1
+Ks 0.9 0.9 0.9
+illum 2
+Ns 34.2967
+map_Kd sju17ejectionseat.jpg
+map_bump 
+bump 
+map_opacity 
+map_d 
+refl 
+map_kS 
+map_kA 
+map_Ns 
