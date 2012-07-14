@@ -1,0 +1,381 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="mesh3ds">
+      <UniqueIdentifier>{9f3d5494-e45b-4c31-8a12-d98623cbee2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="meshobj">
+      <UniqueIdentifier>{a9c5e4b1-a734-4a4e-8d4e-a2faf795fb69}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="meshctm">
+      <UniqueIdentifier>{a35f59ec-6995-470c-b4ba-14f2424c86de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pyarlib">
+      <UniqueIdentifier>{cdce6ade-5bf1-4caf-93e8-69b835ffdb1c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\pyarlib\mesh\lib3ds\lib3ds.h">
+      <Filter>mesh3ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\lib3ds\lib3ds_impl.h">
+      <Filter>mesh3ds</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\simpleobj\obj.h">
+      <Filter>meshobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\simpleobj\uthash.h">
+      <Filter>meshobj</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\Alloc.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\internal.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzFind.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzHash.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzmaDec.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzmaEnc.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzmaLib.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\NameMangle.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\openctm.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\openctmpp.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh\openctm\Types.h">
+      <Filter>meshctm</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\atlas.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\camera.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\config.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\embed.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\fileutil.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\gpu.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\guifps.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\img.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\imgpng.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\immediate.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\includegl.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\jeltz.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\jeltzfly.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\jeltzgui.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\loader.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\material.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\matrix.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\matstack.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\mesh3ds.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\meshctm.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\meshobj.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\model.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\ninebox.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\png_loader.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\prec.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\profile.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\pyarlib.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\quaternion.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\quickgui.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\resourcedefs.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\resources.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\shader.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\shaderbuild.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\shaderutil.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\text.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\texture.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\thread.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\util.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\vbomesh.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\pyarlib\vec.h">
+      <Filter>pyarlib</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_atmosphere.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_background.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_camera.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_chunk.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_chunktable.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_file.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_io.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_light.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_material.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_math.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_matrix.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_mesh.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_node.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_quat.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_shadow.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_track.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_util.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_vector.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_viewport.c">
+      <Filter>mesh3ds</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\simpleobj\obj.c">
+      <Filter>meshobj</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\Alloc.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\compressMG1.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\compressMG2.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\compressRAW.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzFind.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzmaDec.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzmaEnc.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzmaLib.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\openctm.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\stream.c">
+      <Filter>meshctm</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\atlas.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\camera.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\config.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\fileutil.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\gpu.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\guifps.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\img.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\imgpng.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\immediate.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\jeltz.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\jeltzfly.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\jeltzgui.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\material.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\matrix.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\matstack.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh3ds.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\meshctm.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\meshobj.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\model.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\ninebox.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\png_loader.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\prec.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\profile.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\quaternion.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\quickgui.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\resources.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\shader.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\shaderbuild.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\shaderutil.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\text.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\texture.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\thread.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\util.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\vbomesh.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\vec.cpp">
+      <Filter>pyarlib</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>

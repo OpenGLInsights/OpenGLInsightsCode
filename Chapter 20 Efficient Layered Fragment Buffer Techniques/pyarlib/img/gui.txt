@@ -1,0 +1,12 @@
+#this file contains a mapping for gui elements to textures.
+#each texture is split into 9 squares, similarly to the CSS border-image.
+#textures can be stacked vertically for button up/down or checked/unchecked icons.
+#the mapping format is:
+#    <gui-id> <texture> <border distance in pixels> <vertical stack count>
+label label.png 38 1
+buttons button.png 38 4
+checkbox check.png 0 2
+radiocheck radio.png 0 2
+graph fps.png 8 1
+sliderrail slide.png 44 1
+sliderbar slider.png 14 1

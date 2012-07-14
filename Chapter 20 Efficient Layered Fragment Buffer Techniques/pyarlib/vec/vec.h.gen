@@ -1,0 +1,118 @@
+/* Copyright 2011 Pyarelal Knowles, under GNU GPL (see LICENCE.txt) */
+/* file generated on $<date> with gencode.py */
+
+//#alltypes=("f", "float"), ("i", "int"), ("d", "double")
+#pragma once
+#ifndef VEC_H
+#define VEC_H
+#include <math.h>
+#include <stdlib.h>
+
+#define XYZ(v) (v).x, (v).y, (v).z
+#define RANDVEC3FN RANDVEC3F(-1.0f, 1.0f).unit()
+#define RANDVEC3F(a, b) vec3f(((b)-(a))*rand()/(float)RAND_MAX+(a), ((b)-(a))*rand()/(float)RAND_MAX+(a), ((b)-(a))*rand()/(float)RAND_MAX+(a))
+#define PRINTVEC2(v) printf("(%f, %f)\n", (v).x, (v).y);
+#define PRINTVEC3(v) printf("(%f, %f, %f)\n", (v).x, (v).y, (v).z);
+#define PRINTVEC4(v) printf("(%f, %f, %f, %f)\n", (v).x, (v).y, (v).z, (v).w);
+
+//#for vtypec, vtypen in alltypes
+//#for vdim in 2, 3, 4
+struct vec$<vdim>$<vtypec>;
+//#end
+//#end
+typedef vec2f rot2f;
+
+//#for vtypec, vtypen in alltypes
+//#for vdim in 2, 3, 4
+struct vec$<vdim>$<vtypec>
+{
+	$<vtypen> $<", ".join(["x", "y", "z", "w"][:vdim])>;
+	vec$<vdim>$<vtypec>();
+	explicit vec$<vdim>$<vtypec>($<vtypen> d);
+	vec$<vdim>$<vtypec>($<vtypen> $<(", "+vtypen+" ").join(["nx", "ny", "nz", "nw"][:vdim])>);
+	//#for otypec, otypen in alltypes
+	//#for odim in 2, 3, 4
+	//#if vtypec != otypec or vdim != odim
+	vec$<vdim>$<vtypec>(vec$<odim>$<otypec> other);
+	//#end
+	//#end
+	//#end
+	//#for odim in range(2, vdim)
+	vec$<vdim>$<vtypec>(vec$<odim>$<otypec> other, $<vtypen> $<(", "+vtypen+" ").join(["nx", "ny", "nz", "nw"][odim:vdim])>);
+	//#end
+	void operator()($<vtypen> d);
+	void operator()($<vtypen> $<(", "+vtypen+" ").join(["nx", "ny", "nz", "nw"][:vdim])>);
+	//#for op in "+", "-", "/", "*"
+	vec$<vdim>$<vtypec> operator$<op>(const vec$<vdim>$<vtypec>& o) const;
+	void operator$<op>=(const vec$<vdim>$<vtypec>& o);
+	vec$<vdim>$<vtypec> operator$<op>($<vtypen> d) const;
+	//#if vtypec not in "fd"
+	vec$<vdim>$<vtypec> operator$<op>(float d) const;
+	//#end
+	//#if vtypec != "d"
+	vec$<vdim>$<vtypec> operator$<op>(double d) const;
+	//#end
+	void operator$<op>=($<vtypen> d);
+	//#if vtypec not in "fd"
+	void operator$<op>=(float d);
+	//#end
+	//#if vtypec != "d"
+	void operator$<op>=(double d);
+	//#end
+	//#end
+	bool operator==(const vec$<vdim>$<vtypec>& other) const;
+	bool operator!=(const vec$<vdim>$<vtypec>& other) const;
+	bool operator>(const vec$<vdim>$<vtypec>& other) const;
+	bool operator<(const vec$<vdim>$<vtypec>& other) const;
+	bool operator>=(const vec$<vdim>$<vtypec>& other) const;
+	bool operator<=(const vec$<vdim>$<vtypec>& other) const;
+	vec$<vdim>$<vtypec> operator%(const vec$<vdim>$<vtypec>& other) const;
+	vec$<vdim>$<vtypec> operator%($<vtypen> d) const;
+	void operator%=(const vec$<vdim>$<vtypec>& other);
+	void operator%=($<vtypen> d);
+	$<vtypen> distsq(const vec$<vdim>$<vtypec>& other) const;
+	$<vtypen> dist(const vec$<vdim>$<vtypec>& other) const;
+	$<vtypen> dot(const vec$<vdim>$<vtypec>& other) const;
+	$<vtypen> sizesq() const;
+	$<vtypen> size() const;
+	$<vtypen> cmax() const;
+	$<vtypen> cmin() const;
+	vec$<vdim>$<vtypec> tolen($<vtypen> len);
+	void normalize();
+	vec$<vdim>$<vtypec> unit() const;
+	//#if vtypec == "f" and vdim == 2
+	vec3f toVec() const;
+	static vec2f fromVec(const vec3f& v);
+	//#end
+	//#if vdim == 3
+	vec$<vdim>$<vtypec> cross(const vec$<vdim>$<vtypec>& other) const;
+	//#end
+	
+	//swivel operators
+	//#for sdim in range(2, 1+vdim)
+	//#for swivel in [''.join(s) for s in permutations("xyzw"[:vdim], sdim)]
+	//#if swivel != "xyzw"[:vdim]
+	vec$<sdim>$<vtypec> $<swivel>() const;
+	//#end
+	//#end
+	//#end
+};
+vec$<vdim>$<vtypec> operator-(vec$<vdim>$<vtypec> v);
+vec$<vdim>$<vtypec> operator/($<vtypen> n, vec$<vdim>$<vtypec> v);
+//#if vtypec not in "fd"
+vec$<vdim>$<vtypec> operator/(float n, vec$<vdim>$<vtypec> v);
+//#end
+//#if vtypec != "d"
+vec$<vdim>$<vtypec> operator/(double n, vec$<vdim>$<vtypec> v);
+//#end
+vec$<vdim>$<vtypec> vmin(vec$<vdim>$<vtypec> a, vec$<vdim>$<vtypec> b);
+vec$<vdim>$<vtypec> vmax(vec$<vdim>$<vtypec> a, vec$<vdim>$<vtypec> b);
+vec$<vdim>$<vtypec> vmin(vec$<vdim>$<vtypec> a, $<vtypen> b);
+vec$<vdim>$<vtypec> vmax(vec$<vdim>$<vtypec> a, $<vtypen> b);
+vec$<vdim>$<vtypec> vmin($<vtypen> a, vec$<vdim>$<vtypec> b);
+vec$<vdim>$<vtypec> vmax($<vtypen> a, vec$<vdim>$<vtypec> b);
+//#end
+//#end
+
+#endif
+

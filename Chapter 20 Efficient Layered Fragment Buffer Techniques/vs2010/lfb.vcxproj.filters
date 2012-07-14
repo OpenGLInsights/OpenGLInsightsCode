@@ -1,0 +1,139 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav</Extensions>
+    </Filter>
+    <Filter Include="shaders">
+      <UniqueIdentifier>{1b74fcf5-6d45-4173-89b5-833f10fdd277}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\imageBuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lfb.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lfbBasic.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lfbLinked.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lfbPages.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\lfbRagged.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\prefixSums.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\extraglenums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\heapsort.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\imageBuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lfb.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lfbBasic.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lfbLinked.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lfbPages.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\lfbRagged.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\prefixSums.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\pyarlib\resources.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\lfb.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbBasic.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbClear.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbCopy.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbCount.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbCount.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbDisplay.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbDisplay.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbLinked.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbPages.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbRagged.glsl">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbRaggedSort.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbRender.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbRender.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\lfbZero.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\phong.frag">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\phong.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\prefixSums.vert">
+      <Filter>shaders</Filter>
+    </None>
+    <None Include="..\sorting.glsl">
+      <Filter>shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>

@@ -1,0 +1,52 @@
+/* Copyright 2011 Pyarelal Knowles, under GNU LGPL (see LICENCE.txt) */
+
+#include "pyarlib/shaderutil.h" //still relied on by shader.h (due for deprecation)
+
+#include "pyarlib/jeltz.h"
+#include "pyarlib/jeltzgui.h"
+#include "pyarlib/jeltzfly.h"
+#include "pyarlib/vbomesh.h"
+
+#include "pyarlib/imgpng.h"
+
+Jeltz jeltz("Jeltz");
+JeltzFly fly;
+JeltzGUI gui;
+
+VBOMesh sphere;
+
+void update(float dt)
+{
+	if (jeltz.buttonDown("`"))
+	{
+		gui.visible = !gui.visible;
+		gui.fps.print = !gui.visible;
+	}
+}
+
+void display()
+{
+	fly.uploadCamera();
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	sphere.draw();
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+}
+
+int main()
+{
+	jeltz.setUpdate(update);
+	jeltz.setDisplay(display);
+	jeltz.add(&gui);
+	jeltz.add(&fly);
+	jeltz.init();
+
+	initWgl(); //for shaderutil.h
+
+	sphere = VBOMesh::grid(vec2i(64, 32), VBOMesh::paramSphere);
+	sphere.upload();
+
+	jeltz.run();
+	return 0;
+}

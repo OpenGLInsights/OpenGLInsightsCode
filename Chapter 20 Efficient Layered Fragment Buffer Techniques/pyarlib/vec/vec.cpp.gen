@@ -1,0 +1,345 @@
+/* Copyright 2011 Pyarelal Knowles, under GNU GPL (see LICENCE.txt) */
+/* file generated on $<date> with gencode.py */
+
+//#alltypes=("f", "float"), ("i", "int"), ("d", "double")
+#include "vec.h"
+
+#ifdef _WIN32
+#pragma warning (disable:4244) //loss of precision warnings
+#endif
+
+//#for vtypec, vtypen in alltypes
+//#for vdim in 2, 3, 4
+vec$<vdim>$<vtypec>::vec$<vdim>$<vtypec>()
+{
+}
+vec$<vdim>$<vtypec>::vec$<vdim>$<vtypec>($<vtypen> d)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> = d;
+	//#end
+}
+vec$<vdim>$<vtypec>::vec$<vdim>$<vtypec>($<vtypen> $<(", "+vtypen+" ").join(["nx", "ny", "nz", "nw"][:vdim])>)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> = n$<tc>;
+	//#end
+}
+//#for otypec, otypen in alltypes
+//#for odim in 2, 3, 4
+//#if vtypec != otypec or vdim != odim
+vec$<vdim>$<vtypec>::vec$<vdim>$<vtypec>(vec$<odim>$<otypec> other)
+{
+	//#for tc in ["x", "y", "z", "w"][:min(odim, vdim)]
+	$<tc> = ($<vtypen>)other.$<tc>;
+	//#end
+	//#for tc in ["x", "y", "z", "w"][odim:vdim]
+	$<tc> = 0;
+	//#end
+}
+//#end
+//#end
+//#end
+//#for odim in range(2, vdim)
+vec$<vdim>$<vtypec>::vec$<vdim>$<vtypec>(vec$<odim>$<otypec> other, $<vtypen> $<(", "+vtypen+" ").join(["nx", "ny", "nz", "nw"][odim:vdim])>)
+{
+	//#for tc in ["x", "y", "z", "w"][:odim]
+	$<tc> = ($<vtypen>)other.$<tc>;
+	//#end
+	//#for tc in ["x", "y", "z", "w"][odim:vdim]
+	$<tc> = n$<tc>;
+	//#end
+}
+//#end
+void vec$<vdim>$<vtypec>::operator()($<vtypen> d)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> = d;
+	//#end
+}
+void vec$<vdim>$<vtypec>::operator()($<vtypen> $<(", "+vtypen+" ").join(["nx", "ny", "nz", "nw"][:vdim])>)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> = n$<tc>;
+	//#end
+}
+//#for op in "+", "-", "/", "*"
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::operator$<op>(const vec$<vdim>$<vtypec>& o) const
+{
+	return vec$<vdim>$<vtypec>($<", ".join([n+op+"o."+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+void vec$<vdim>$<vtypec>::operator$<op>=(const vec$<vdim>$<vtypec>& o)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> $<op>= o.$<tc>;
+	//#end
+}
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::operator$<op>($<vtypen> d) const
+{
+	return vec$<vdim>$<vtypec>($<", ".join([n+op+"d" for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+//#if vtypec not in "fd"
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::operator$<op>(float d) const
+{
+	return vec$<vdim>$<vtypec>($<", ".join([n+op+"d" for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+//#end
+//#if vtypec != "d"
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::operator$<op>(double d) const
+{
+	return vec$<vdim>$<vtypec>($<", ".join([n+op+"d" for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+//#end
+void vec$<vdim>$<vtypec>::operator$<op>=($<vtypen> d)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> $<op>= d;
+	//#end
+}
+//#if vtypec not in "fd"
+void vec$<vdim>$<vtypec>::operator$<op>=(float d)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> $<op>= d;
+	//#end
+}
+//#end
+//#if vtypec != "d"
+void vec$<vdim>$<vtypec>::operator$<op>=(double d)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	$<tc> $<op>= d;
+	//#end
+}
+//#end
+//#end
+bool vec$<vdim>$<vtypec>::operator==(const vec$<vdim>$<vtypec>& other) const
+{
+	return $<" && ".join([n+"==other."+n for n in ["x", "y", "z", "w"][:vdim]])>;
+}
+bool vec$<vdim>$<vtypec>::operator!=(const vec$<vdim>$<vtypec>& other) const
+{
+	return $<" || ".join([n+"!=other."+n for n in ["x", "y", "z", "w"][:vdim]])>;
+}
+bool vec$<vdim>$<vtypec>::operator>(const vec$<vdim>$<vtypec>& other) const
+{
+	return size() > other.size();
+}
+bool vec$<vdim>$<vtypec>::operator<(const vec$<vdim>$<vtypec>& other) const
+{
+	return size() < other.size();
+}
+bool vec$<vdim>$<vtypec>::operator>=(const vec$<vdim>$<vtypec>& other) const
+{
+	return size() >= other.size();
+}
+bool vec$<vdim>$<vtypec>::operator<=(const vec$<vdim>$<vtypec>& other) const
+{
+	return size() <= other.size();
+}
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::operator%(const vec$<vdim>$<vtypec>& other) const
+{
+	//#if vtypec == "i"
+	return vec$<vdim>$<vtypec>($<", ".join([n+"%other."+n for n in ["x", "y", "z", "w"][:vdim]])>);
+	//#end
+	//#if vtypec != "i"
+	return vec$<vdim>$<vtypec>($<", ".join(["fmod("+n+",other."+n+")" for n in ["x", "y", "z", "w"][:vdim]])>);
+	//#end
+}
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::operator%($<vtypen> d) const
+{
+	//#if vtypec == "i"
+	return vec$<vdim>$<vtypec>($<", ".join([n+"%d" for n in ["x", "y", "z", "w"][:vdim]])>);
+	//#end
+	//#if vtypec != "i"
+	return vec$<vdim>$<vtypec>($<", ".join(["fmod("+n+",d)" for n in ["x", "y", "z", "w"][:vdim]])>);
+	//#end
+}
+void vec$<vdim>$<vtypec>::operator%=(const vec$<vdim>$<vtypec>& other)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	//#if vtypec == "i"
+	$<tc> %= other.$<tc>;
+	//#end
+	//#if vtypec != "i"
+	$<tc> = fmod($<tc>, other.$<tc>);
+	//#end
+	//#end
+}
+void vec$<vdim>$<vtypec>::operator%=($<vtypen> d)
+{
+	//#for tc in ["x", "y", "z", "w"][:vdim]
+	//#if vtypec == "i"
+	$<tc> %= d;
+	//#end
+	//#if vtypec != "i"
+	$<tc> = fmod($<tc>, d);
+	//#end
+	//#end
+}
+$<vtypen> vec$<vdim>$<vtypec>::distsq(const vec$<vdim>$<vtypec>& other) const
+{
+	//#for d in ["x", "y", "z", "w"][:vdim]
+	$<vtypen> d$<d> = other.$<d> - $<d>;
+	//#end
+	return $<" + ".join(["d"+n+"*d"+n for n in ["x", "y", "z", "w"][:vdim]])>;
+}
+$<vtypen> vec$<vdim>$<vtypec>::dist(const vec$<vdim>$<vtypec>& other) const
+{
+	//#for d in ["x", "y", "z", "w"][:vdim]
+	float d$<d> = (float)(other.$<d> - $<d>);
+	//#end
+	return ($<vtypen>)sqrt($<" + ".join(["d"+n+"*d"+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+$<vtypen> vec$<vdim>$<vtypec>::dot(const vec$<vdim>$<vtypec>& other) const
+{
+	return ($<vtypen>)($<" + ".join([n+"*other."+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+$<vtypen> vec$<vdim>$<vtypec>::sizesq() const
+{
+	return $<" + ".join(["(float)"+n+"*"+n for n in ["x", "y", "z", "w"][:vdim]])>;
+}
+$<vtypen> vec$<vdim>$<vtypec>::size() const
+{
+	return ($<vtypen>)sqrt($<" + ".join(["(float)"+n+"*"+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+$<vtypen> vec$<vdim>$<vtypec>::cmax() const
+{
+	$<vtypen> r = x;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	r = r > $<d> ? r : $<d>;
+	//#end
+	return r;
+}
+$<vtypen> vec$<vdim>$<vtypec>::cmin() const
+{
+	$<vtypen> r = x;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	r = r < $<d> ? r : $<d>;
+	//#end
+	return r;
+}
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::tolen($<vtypen> len)
+{
+	return *this * (len / size());
+}
+void vec$<vdim>$<vtypec>::normalize()
+{
+	*this /= size();
+}
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::unit() const
+{
+	return *this / size();
+}
+//#if vtypec == "f" and vdim == 2
+vec3f vec$<vdim>$<vtypec>::toVec() const
+{
+	vec3f v;
+	v.y = sin(x);
+	float r = cos(x);
+	v.x = -sin(y)*r;
+	v.z = -cos(y)*r;
+	return v;
+}
+vec2f vec$<vdim>$<vtypec>::fromVec(const vec3f& v)
+{
+	vec2f r;
+	float d = sqrt(v.x*v.x + v.z*v.z);
+	r.x = atan2(v.y, d);
+	r.y = atan2(-v.x, -v.z);
+	return r;
+}
+//#end
+//#if vdim == 3
+vec$<vdim>$<vtypec> vec$<vdim>$<vtypec>::cross(const vec$<vdim>$<vtypec>& other) const
+{
+	$<vtypen> a = y * other.z - z * other.y;
+	$<vtypen> b = x * other.z - z * other.x;
+	$<vtypen> c = x * other.y - y * other.x;
+	return vec$<vdim>$<vtypec>(a, -b, c);
+}
+//#end
+
+//swivel operators
+//#for sdim in range(2, 1+vdim)
+//#for swivel in [''.join(s) for s in permutations("xyzw"[:vdim], sdim)]
+//#if swivel != "xyzw"[:vdim]
+vec$<sdim>$<vtypec> vec$<vdim>$<vtypec>::$<swivel>() const
+{
+	return vec$<sdim>$<vtypec>($<", ".join(swivel)>);
+}
+//#end
+//#end
+//#end
+
+vec$<vdim>$<vtypec> operator-(vec$<vdim>$<vtypec> v)
+{
+	return vec$<vdim>$<vtypec>($<", ".join(["-v."+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+vec$<vdim>$<vtypec> operator/($<vtypen> n, vec$<vdim>$<vtypec> v)
+{
+	return vec$<vdim>$<vtypec>($<", ".join(["n/v."+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+//#if vtypec not in "fd"
+vec$<vdim>$<vtypec> operator/(float n, vec$<vdim>$<vtypec> v)
+{
+	return vec$<vdim>$<vtypec>($<", ".join(["n/v."+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+//#end
+//#if vtypec != "d"
+vec$<vdim>$<vtypec> operator/(double n, vec$<vdim>$<vtypec> v)
+{
+	return vec$<vdim>$<vtypec>($<", ".join(["n/v."+n for n in ["x", "y", "z", "w"][:vdim]])>);
+}
+//#end
+vec$<vdim>$<vtypec> vmin(vec$<vdim>$<vtypec> a, vec$<vdim>$<vtypec> b)
+{
+	vec$<vdim>$<vtypec> ret;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	ret.$<d> = a.$<d> < b.$<d> ? a.$<d> : b.$<d>;
+	//#end
+	return ret;
+}
+vec$<vdim>$<vtypec> vmax(vec$<vdim>$<vtypec> a, vec$<vdim>$<vtypec> b)
+{
+	vec$<vdim>$<vtypec> ret;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	ret.$<d> = a.$<d> > b.$<d> ? a.$<d> : b.$<d>;
+	//#end
+	return ret;
+}
+vec$<vdim>$<vtypec> vmin(vec$<vdim>$<vtypec> a, $<vtypen> b)
+{
+	vec$<vdim>$<vtypec> ret;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	ret.$<d> = a.$<d> < b ? a.$<d> : b;
+	//#end
+	return ret;
+}
+vec$<vdim>$<vtypec> vmax(vec$<vdim>$<vtypec> a, $<vtypen> b)
+{
+	vec$<vdim>$<vtypec> ret;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	ret.$<d> = a.$<d> > b ? a.$<d> : b;
+	//#end
+	return ret;
+}
+vec$<vdim>$<vtypec> vmin($<vtypen> a, vec$<vdim>$<vtypec> b)
+{
+	vec$<vdim>$<vtypec> ret;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	ret.$<d> = a < b.$<d> ? a : b.$<d>;
+	//#end
+	return ret;
+}
+vec$<vdim>$<vtypec> vmax($<vtypen> a, vec$<vdim>$<vtypec> b)
+{
+	vec$<vdim>$<vtypec> ret;
+	//#for d in ["x", "y", "z", "w"][1:vdim]
+	ret.$<d> = a > b.$<d> ? a : b.$<d>;
+	//#end
+	return ret;
+}
+//#end
+//#end
+

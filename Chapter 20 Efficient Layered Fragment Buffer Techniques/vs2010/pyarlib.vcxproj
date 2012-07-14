@@ -1,0 +1,209 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{33CD0793-DA5C-4F12-8B95-77E7F84C977E}</ProjectGuid>
+    <RootNamespace>pyarlib</RootNamespace>
+    <Keyword>Win32Proj</Keyword>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup>
+    <_ProjectFileVersion>10.0.30319.1</_ProjectFileVersion>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(Configuration)\</IntDir>
+    <OutDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(SolutionDir)$(Configuration)\</OutDir>
+    <IntDir Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(Configuration)\</IntDir>
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" />
+    <CodeAnalysisRuleSet Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">AllRules.ruleset</CodeAnalysisRuleSet>
+    <CodeAnalysisRules Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+    <CodeAnalysisRuleAssemblies Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" />
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>$(SolutionDir)../otherlibs/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;LIB3DS_EXPORTS;OPENCTM_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <Optimization>MaxSpeed</Optimization>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <AdditionalIncludeDirectories>$(SolutionDir)../otherlibs/include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;LIB3DS_EXPORTS;OPENCTM_STATIC;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+    </ClCompile>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClInclude Include="..\pyarlib\mesh\lib3ds\lib3ds.h" />
+    <ClInclude Include="..\pyarlib\mesh\lib3ds\lib3ds_impl.h" />
+    <ClInclude Include="..\pyarlib\mesh\simpleobj\obj.h" />
+    <ClInclude Include="..\pyarlib\mesh\simpleobj\uthash.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\Alloc.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\internal.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzFind.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzHash.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzmaDec.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzmaEnc.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\LzmaLib.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\NameMangle.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\openctm.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\openctmpp.h" />
+    <ClInclude Include="..\pyarlib\mesh\openctm\Types.h" />
+    <ClInclude Include="..\pyarlib\atlas.h" />
+    <ClInclude Include="..\pyarlib\camera.h" />
+    <ClInclude Include="..\pyarlib\config.h" />
+    <ClInclude Include="..\pyarlib\embed.h" />
+    <ClInclude Include="..\pyarlib\fileutil.h" />
+    <ClInclude Include="..\pyarlib\gpu.h" />
+    <ClInclude Include="..\pyarlib\guifps.h" />
+    <ClInclude Include="..\pyarlib\img.h" />
+    <ClInclude Include="..\pyarlib\imgpng.h" />
+    <ClInclude Include="..\pyarlib\immediate.h" />
+    <ClInclude Include="..\pyarlib\includegl.h" />
+    <ClInclude Include="..\pyarlib\jeltz.h" />
+    <ClInclude Include="..\pyarlib\jeltzfly.h" />
+    <ClInclude Include="..\pyarlib\jeltzgui.h" />
+    <ClInclude Include="..\pyarlib\loader.h" />
+    <ClInclude Include="..\pyarlib\material.h" />
+    <ClInclude Include="..\pyarlib\matrix.h" />
+    <ClInclude Include="..\pyarlib\matstack.h" />
+    <ClInclude Include="..\pyarlib\mesh3ds.h" />
+    <ClInclude Include="..\pyarlib\meshctm.h" />
+    <ClInclude Include="..\pyarlib\meshobj.h" />
+    <ClInclude Include="..\pyarlib\model.h" />
+    <ClInclude Include="..\pyarlib\ninebox.h" />
+    <ClInclude Include="..\pyarlib\png_loader.h" />
+    <ClInclude Include="..\pyarlib\prec.h" />
+    <ClInclude Include="..\pyarlib\profile.h" />
+    <ClInclude Include="..\pyarlib\pyarlib.h" />
+    <ClInclude Include="..\pyarlib\quaternion.h" />
+    <ClInclude Include="..\pyarlib\quickgui.h" />
+    <ClInclude Include="..\pyarlib\resourcedefs.h" />
+    <ClInclude Include="..\pyarlib\resources.h" />
+    <ClInclude Include="..\pyarlib\shader.h" />
+    <ClInclude Include="..\pyarlib\shaderbuild.h" />
+    <ClInclude Include="..\pyarlib\shaderutil.h" />
+    <ClInclude Include="..\pyarlib\text.h" />
+    <ClInclude Include="..\pyarlib\texture.h" />
+    <ClInclude Include="..\pyarlib\thread.h" />
+    <ClInclude Include="..\pyarlib\util.h" />
+    <ClInclude Include="..\pyarlib\vbomesh.h" />
+    <ClInclude Include="..\pyarlib\vec.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_atmosphere.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_background.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_camera.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_chunk.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_chunktable.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_file.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_io.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_light.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_material.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_math.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_matrix.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_mesh.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_node.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_quat.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_shadow.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_track.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_util.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_vector.c" />
+    <ClCompile Include="..\pyarlib\mesh\lib3ds\lib3ds_viewport.c" />
+    <ClCompile Include="..\pyarlib\mesh\simpleobj\obj.c">
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">CompileAsCpp</CompileAs>
+      <CompileAs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">CompileAsCpp</CompileAs>
+    </ClCompile>
+    <ClCompile Include="..\pyarlib\mesh\openctm\Alloc.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\compressMG1.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\compressMG2.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\compressRAW.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzFind.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzmaDec.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzmaEnc.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\LzmaLib.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\openctm.c" />
+    <ClCompile Include="..\pyarlib\mesh\openctm\stream.c" />
+    <ClCompile Include="..\pyarlib\atlas.cpp" />
+    <ClCompile Include="..\pyarlib\camera.cpp" />
+    <ClCompile Include="..\pyarlib\config.cpp" />
+    <ClCompile Include="..\pyarlib\fileutil.cpp" />
+    <ClCompile Include="..\pyarlib\gpu.cpp" />
+    <ClCompile Include="..\pyarlib\guifps.cpp" />
+    <ClCompile Include="..\pyarlib\img.cpp" />
+    <ClCompile Include="..\pyarlib\imgpng.cpp" />
+    <ClCompile Include="..\pyarlib\immediate.cpp" />
+    <ClCompile Include="..\pyarlib\jeltz.cpp" />
+    <ClCompile Include="..\pyarlib\jeltzfly.cpp" />
+    <ClCompile Include="..\pyarlib\jeltzgui.cpp" />
+    <ClCompile Include="..\pyarlib\material.cpp" />
+    <ClCompile Include="..\pyarlib\matrix.cpp" />
+    <ClCompile Include="..\pyarlib\matstack.cpp" />
+    <ClCompile Include="..\pyarlib\mesh3ds.cpp" />
+    <ClCompile Include="..\pyarlib\meshctm.cpp" />
+    <ClCompile Include="..\pyarlib\meshobj.cpp" />
+    <ClCompile Include="..\pyarlib\model.cpp" />
+    <ClCompile Include="..\pyarlib\ninebox.cpp" />
+    <ClCompile Include="..\pyarlib\png_loader.cpp" />
+    <ClCompile Include="..\pyarlib\prec.cpp" />
+    <ClCompile Include="..\pyarlib\profile.cpp" />
+    <ClCompile Include="..\pyarlib\quaternion.cpp" />
+    <ClCompile Include="..\pyarlib\quickgui.cpp" />
+    <ClCompile Include="..\pyarlib\resources.cpp" />
+    <ClCompile Include="..\pyarlib\shader.cpp" />
+    <ClCompile Include="..\pyarlib\shaderbuild.cpp" />
+    <ClCompile Include="..\pyarlib\shaderutil.cpp" />
+    <ClCompile Include="..\pyarlib\text.cpp" />
+    <ClCompile Include="..\pyarlib\texture.cpp" />
+    <ClCompile Include="..\pyarlib\thread.cpp" />
+    <ClCompile Include="..\pyarlib\util.cpp" />
+    <ClCompile Include="..\pyarlib\vbomesh.cpp" />
+    <ClCompile Include="..\pyarlib\vec.cpp" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>
