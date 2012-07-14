@@ -1,0 +1,1569 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html>
+<head>
+
+<!--
+WebGL shader tutorial, by Stefan Gustavson 2012-06-12.
+
+All code in this file is in the public domain, except
+for the included files, which have their own licenses
+as specifed in those files, and the noise function in
+the shader code which is distributed under an MIT
+license, as specified in the shader.
+
+TODO: Interaction on touch devices (smartphones with OGL ES)
+is functional, but very limited. I have not implemented
+multi-touch events in the canvas touch callbacks, so you
+are restricted to one simple kind of interaction: rotation
+by swiping one finger. I should change this, but I got my
+first touch device yesterday, and I need to learn more.
+-->
+
+<title>WebGL halftone shader tutorial</title>
+
+<meta http-equiv="content-type" content="text/html; charset=utf-8">
+
+<!-- <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no"> -->
+
+<script type="text/javascript" src="webgl-utils.js"></script>
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shCore.js"></script>
+<script type="text/javascript" src="syntaxhighlighter_3.0.83/scripts/shBrushGLSL.js"></script>
+
+<link type="text/css" rel="stylesheet" href="shadertutorial.css"/>
+<link type="text/css" rel="stylesheet" href="syntaxhighlighter_3.0.83/styles/shCoreEclipse.css"/>
+
+<script type="text/javascript">SyntaxHighlighter.all();</script>
+
+<script type="text/javascript">
+
+    var gl;  // GL context, shared and persistent
+
+    function initGL(canvas) {
+        try {
+            gl = canvas.getContext("experimental-webgl");
+			gl.viewportWidth = canvas.width;
+            gl.viewportHeight = canvas.height;
+			gl.getExtension("OES_standard_derivatives");
+        } catch (e) {
+        }
+        if (!gl) {
+            alert("Could not initialise WebGL, sorry :-(");
+        }
+    }
+
+
+    function getShader(gl, id) {
+        var shaderScript = document.getElementById(id);
+        if (!shaderScript) {
+            return null;
+        }
+
+        var str = "";
+        var k = shaderScript.firstChild;
+        while (k) {
+            if (k.nodeType == 3) {
+                str += k.textContent;
+            }
+            k = k.nextSibling;
+        }
+
+        var shader;
+        if (shaderScript.type == "x-shader/x-fragment") {
+            shader = gl.createShader(gl.FRAGMENT_SHADER);
+        } else if (shaderScript.type == "x-shader/x-vertex") {
+            shader = gl.createShader(gl.VERTEX_SHADER);
+        } else {
+            return null;
+        }
+
+        gl.shaderSource(shader, str);
+        gl.compileShader(shader);
+
+        if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
+            alert("GLSL compile error:\n" + gl.getShaderInfoLog(shader));
+            return null;
+        }
+
+        return shader;
+    }
+
+
+    var shaderProgram;
+
+    function initShaders(vs_id, fs_id) {
+        var fragmentShader = getShader(gl, vs_id);
+        var vertexShader = getShader(gl, fs_id);
+
+        shaderProgram = gl.createProgram();
+        gl.attachShader(shaderProgram, vertexShader);
+        gl.attachShader(shaderProgram, fragmentShader);
+        gl.linkProgram(shaderProgram);
+
+        if (!gl.getProgramParameter(shaderProgram, gl.LINK_STATUS)) {
+            alert("Could not initialise shaders");
+        }
+
+        gl.useProgram(shaderProgram);
+
+        shaderProgram.aVertexPosition =
+			gl.getAttribLocation(shaderProgram, "aVertexPosition");
+        gl.enableVertexAttribArray(shaderProgram.aVertexPosition);
+
+        shaderProgram.aTextureCoord =
+			gl.getAttribLocation(shaderProgram, "aTextureCoord");
+        gl.enableVertexAttribArray(shaderProgram.aTextureCoord);
+
+        shaderProgram.uXoffset = gl.getUniformLocation(shaderProgram, "uXoffset");
+        shaderProgram.uYoffset = gl.getUniformLocation(shaderProgram, "uYoffset");
+        shaderProgram.uScale = gl.getUniformLocation(shaderProgram, "uScale");
+        shaderProgram.uXrot = gl.getUniformLocation(shaderProgram, "uXrot");
+        shaderProgram.uYrot = gl.getUniformLocation(shaderProgram, "uYrot");
+        shaderProgram.uSampler = gl.getUniformLocation(shaderProgram, "uSampler");
+        shaderProgram.uDims = gl.getUniformLocation(shaderProgram, "uDims");
+        // shaderProgram.uTime = gl.getUniformLocation(shaderProgram, "uTime");
+    }
+
+
+	var textureSize = [1,1];
+	
+    function handleLoadedTexture(texture) {
+        gl.bindTexture(gl.TEXTURE_2D, texture);
+        gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+        gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA,
+			gl.RGBA, gl.UNSIGNED_BYTE, texture.image);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+		 // Avoid unsupported wrap modes for not-powers-of-two (NPOT) textures
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+		// Do not generate mipmaps - mipmaps are unsupported for NPOT in WebGL
+        gl.bindTexture(gl.TEXTURE_2D, null);
+		textureSize = [texture.image.width, texture.image.height];
+    }
+
+
+    var TextureRGBA;
+
+    function initTexture() {
+        TextureRGBA = gl.createTexture();
+        TextureRGBA.image = new Image();
+        TextureRGBA.image.onload = function () {
+            handleLoadedTexture(TextureRGBA)
+        }
+        TextureRGBA.image.src = "texture.png";
+    }
+
+
+    var quadVertexPositionBuffer;
+    var quadVertexTextureCoordBuffer;
+    var quadVertexIndexBuffer;
+
+    function initBuffers() {
+        quadVertexPositionBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, quadVertexPositionBuffer);
+        vertices = [
+            // Vertices for one single quad face
+            -1.0, -1.0,  0.0,
+             1.0, -1.0,  0.0,
+             1.0,  1.0,  0.0,
+            -1.0,  1.0,  0.0,
+		];
+        gl.bufferData(gl.ARRAY_BUFFER,
+			new Float32Array(vertices), gl.STATIC_DRAW);
+        quadVertexPositionBuffer.itemSize = 3;
+        quadVertexPositionBuffer.numItems = 4;
+
+        quadVertexTextureCoordBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ARRAY_BUFFER, quadVertexTextureCoordBuffer);
+        var textureCoords = [
+			// Use unit square for texcoords across the single quad
+			0.0, 0.0,
+			1.0, 0.0,
+			1.0, 1.0,
+			0.0, 1.0,
+        ];
+        gl.bufferData(gl.ARRAY_BUFFER,
+			new Float32Array(textureCoords), gl.STATIC_DRAW);
+        quadVertexTextureCoordBuffer.itemSize = 2;
+        quadVertexTextureCoordBuffer.numItems = 4;
+
+        quadVertexIndexBuffer = gl.createBuffer();
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadVertexIndexBuffer);
+        var quadVertexIndices = [
+			// A single quad, made from two triangles
+			0, 1, 2,   0, 2, 3
+        ];
+        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER,
+			new Uint16Array(quadVertexIndices), gl.STATIC_DRAW);
+        quadVertexIndexBuffer.itemSize = 1;
+        quadVertexIndexBuffer.numItems = 6;
+    }
+
+
+    function drawScene() {
+        gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+        gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, quadVertexPositionBuffer);
+        gl.vertexAttribPointer(shaderProgram.aVertexPosition,
+			quadVertexPositionBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.bindBuffer(gl.ARRAY_BUFFER, quadVertexTextureCoordBuffer);
+        gl.vertexAttribPointer(shaderProgram.aTextureCoord,
+			quadVertexTextureCoordBuffer.itemSize, gl.FLOAT, false, 0, 0);
+
+        gl.activeTexture(gl.TEXTURE0);
+        gl.bindTexture(gl.TEXTURE_2D, TextureRGBA);
+        gl.uniform1i(shaderProgram.uSampler, 0); // Texture unit 0
+
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, quadVertexIndexBuffer);
+
+        // Zoom and pan the view
+        gl.uniform1f(shaderProgram.uXoffset, xOffset);
+        gl.uniform1f(shaderProgram.uYoffset, yOffset);
+        gl.uniform1f(shaderProgram.uScale, scale);
+        gl.uniform1f(shaderProgram.uXrot, xRot);
+        gl.uniform1f(shaderProgram.uYrot, yRot);
+        gl.uniform2fv(shaderProgram.uDims, textureSize);
+
+		// Check what time it is and set a uniform variable for animation
+		// var currentTime = (new Date).getTime(); // Returns milliseconds
+        // gl.uniform1f(shaderProgram.uTime, 0.001 * (currentTime - startTime));
+
+		// Draw the single quad
+        gl.drawElements(gl.TRIANGLES, quadVertexIndexBuffer.numItems,
+			gl.UNSIGNED_SHORT, 0);
+    }
+
+    // var startTime = (new Date).getTime();
+
+    function tick() {
+        requestAnimFrame(tick);
+        drawScene();
+    }
+
+    var xOffset = 0.0;
+    var yOffset = 0.0;
+    var xOldOffset = 0.0;
+    var yOldOffset = 0.0;
+    var xRot = 0.0;
+    var yRot = 0.0;
+    var xOldRot = 0.0;
+    var yOldRot = 0.0;
+    var scale = 1.0;
+	var xMouseDown;
+	var yMouseDown;
+	var drag = 0;
+	var shiftdrag = 0;
+
+    function webGLStart() {
+        var canvas = document.getElementById("shaderdemo-canvas");
+		
+		canvas.onmousedown = function ( ev ) {
+			drag = 1;
+			shiftdrag = (ev.shiftKey) ? 1: 0;
+			xMouseDown = ev.clientX; 
+			yMouseDown = ev.clientY;
+			xOldOffset = xOffset;
+			yOldOffset = yOffset;
+			xOldRot = xRot;
+			yOldRot = yRot;
+		}
+
+		canvas.onmouseup = function ( ev ) {
+			var xDelta = ev.clientX - xMouseDown;
+			var yDelta = ev.clientY - yMouseDown;
+			if(shiftdrag == 1) {
+				xRot = xOldRot + (xDelta / canvas.width) * 6.0;
+				yRot = yOldRot + (yDelta / canvas.height) * 6.0;
+				if(yRot < -1.55) yRot = -1.55;
+				if(yRot > 1.55) yRot = 1.55;				
+			}
+			else {
+				xOffset = xOldOffset + (xDelta / canvas.width / scale * 2.0);
+				yOffset = yOldOffset - (yDelta / canvas.height / scale * 2.0); // Flip y
+			}
+			drag = 0;
+			shiftdrag = 0;
+			drawScene();
+		}
+
+		// "onmousedrag" currently doesn't work, it seems, hence this kludge
+		canvas.onmousemove = function ( ev ) {
+			if(drag == 0) return;
+			var xDelta = ev.clientX - xMouseDown;
+			var yDelta = ev.clientY - yMouseDown;
+			if(shiftdrag == 1) {
+				xRot = xOldRot + (xDelta / canvas.width) * 6.0;
+				yRot = yOldRot + (yDelta / canvas.height) * 6.0;
+				if(yRot < -1.55) yRot = -1.55;
+				if(yRot > 1.55) yRot = 1.55;				
+			}
+			else {
+				xOffset = xOldOffset + (xDelta / canvas.width / scale * 2.0);
+				yOffset = yOldOffset - (yDelta / canvas.height / scale * 2.0); // Flip y
+			}
+			drawScene();
+		}
+
+		var wheelHandler = function(ev) {
+			var factor = 1.1; // Scale increment per click
+			if (ev.shiftKey) factor = 1.01;
+			scale *= ((ev.detail || ev.wheelDelta) < 0) ? factor : 1.0/factor;
+			drawScene();
+			ev.preventDefault();
+		};
+		canvas.addEventListener('DOMMouseScroll', wheelHandler, false);
+		canvas.addEventListener('mousewheel', wheelHandler, false);
+
+		canvas.ontouchstart = function ( ev ) {
+			ev.preventDefault();
+			drag = 1;
+			shiftdrag = 1; // TODO: Make fundamental changes to recognize two-finger grab and pinch
+			if (ev.targetTouches) ev = ev.targetTouches[0];
+			xMouseDown = ev.pageX;
+			yMouseDown = ev.pageY;
+			xOldOffset = xOffset;
+			yOldOffset = yOffset;
+			xOldRot = xRot;
+			yOldRot = yRot;
+		}
+
+		canvas.ontouchend = function ( ev ) {
+			ev.preventDefault();
+			if (ev.targetTouches) ev = ev.targetTouches[0];
+			var xDelta = ev.pageX - xMouseDown;
+			var yDelta = ev.pageY - yMouseDown;
+			if(shiftdrag == 1) {
+				xRot = xOldRot + (xDelta / canvas.width) * 6.0;
+				yRot = yOldRot + (yDelta / canvas.height) * 6.0;
+				if(yRot < -1.55) yRot = -1.55;
+				if(yRot > 1.55) yRot = 1.55;				
+			}
+			else {
+				xOffset = xOldOffset + (xDelta / canvas.width / scale * 2.0);
+				yOffset = yOldOffset - (yDelta / canvas.height / scale * 2.0); // Flip y
+			}
+			drag = 0;
+			shiftdrag = 0;
+			drawScene();
+		}
+
+		canvas.ontouchmove = function ( ev ) {
+			ev.preventDefault();
+			if(drag == 0) return;
+			if (ev.targetTouches) ev = ev.targetTouches[0];
+			var xDelta = ev.pageX - xMouseDown;
+			var yDelta = ev.pageY - yMouseDown;
+			if(shiftdrag == 1) {
+				xRot = xOldRot + (xDelta / canvas.width) * 6.0;
+				yRot = yOldRot + (yDelta / canvas.height) * 6.0;
+				if(yRot < -1.55) yRot = -1.55;
+				if(yRot > 1.55) yRot = 1.55;				
+			}
+			else {
+				xOffset = xOldOffset + (xDelta / canvas.width / scale * 2.0);
+				yOffset = yOldOffset - (yDelta / canvas.height / scale * 2.0); // Flip y
+			}
+			drawScene();
+		}
+
+        initGL(canvas);
+        initShaders("shader-vs", "shader-fs-1");
+        initBuffers();
+        initTexture();
+
+        gl.clearColor(0.0, 0.0, 0.0, 1.0);
+        gl.enable(gl.DEPTH_TEST);
+
+        tick();
+    }
+
+	function showcontent(captionid, shaderid) {
+		var captionPane = document.getElementById("caption-pane");
+		var shaderPane = document.getElementById("shader-pane");
+		var captionString = "";
+		captionString += document.getElementById(captionid).innerHTML;
+		captionPane.innerHTML = captionString;
+		var shaderScript = document.getElementById(shaderid);
+		var shaderString = '<pre class="brush: GLSL;">\n';
+        if (!shaderScript) {
+            shaderString += "// (code not found)";
+        }
+        else {
+			var k = shaderScript.firstChild;
+			while (k) {
+				if (k.nodeType == 3) {
+					shaderString += k.textContent;
+				}
+				k = k.nextSibling;
+			}
+		}
+		shaderString += "</pre>\n";
+		shaderPane.innerHTML = shaderString;
+		initShaders('shader-vs', shaderid);
+		SyntaxHighlighter.highlight(shaderPane);
+	}
+
+	function showpage(number) {
+		showcontent("caption-" + number, "shader-fs-" + number);
+	}
+
+</script>
+
+</head>
+
+<body onload="webGLStart(); showpage(1)">
+
+<h1>WebGL halftone shader: a step-by-step tutorial</h1>
+<h3>
+	<a class="navigation" href="javascript:showpage(1)">Page 1</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(2)">2</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(3)">3</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(4)">4</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(5)">5</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(6)">6</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(7)">7</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(8)">8</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(9)">9</a>&nbsp;
+	<a class="navigation" href="javascript:showpage(10)">10</a>
+</h3>
+
+<table>
+	<tr>
+		<td valign="top" style="width:500px">
+		<div id="caption-pane"><p>(caption)</p><div></td>
+		<td valign="top">
+			<br/>
+			<canvas id="shaderdemo-canvas"
+				style="border: none; padding-left:20px"
+				width="400px" height="400px">
+			</canvas>
+			<p style="text-align: center">
+			Drag the mouse in the image to move the object.<br />
+			Shift-drag to rotate. Use the mouse wheel to zoom.<br />
+			On touch devices, drag to rotate. (That's it for now.)
+			</p>
+		</td>
+	</tr>
+</table>
+
+<h2>Fragment shader</h2>
+<pre id="shader-pane" class="brush: GLSL;">
+// Placeholder for dynamically loaded shader code
+</pre>
+
+<div id="caption-1" style="display:none">
+<h2>1. There are dots</h2>
+<p>A basic halftone pattern consists of a grid of round dots.
+We create this pattern by computing the distance to the nearest
+point in a square grid, and setting the fragment color to black
+or white depending on whether we are inside or outside a certain
+radius.</p>
+<p>Note that we are not using an <span class="code">if-else</span>
+statement, but a combination of <span class="code">step()</span>
+and <span class="code">mix()</span> functions. This is the
+proper way of expressing a conditional to select a color in
+a shader. The reason will become apparent in step 3.</p>
+</div>
+
+<script id="shader-fs-1" type="x-shader/x-fragment">
+#ifdef GL_ES
+precision highp float;
+#endif
+
+varying vec2 st; // Texcoords
+
+void main() {
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	float frequency = 10.0;
+	vec2 nearest = 2.0*fract(frequency * st) - 1.0;
+	float dist = length(nearest);
+	float radius = 0.5;
+	vec3 white = vec3(1.0, 1.0, 1.0);
+	vec3 black = vec3(0.0, 0.0, 0.0);
+	vec3 fragcolor = mix(black, white, step(radius, dist));
+	gl_FragColor = vec4(fragcolor, 1.0);
+}
+</script>
+
+<div id="caption-2" style="display:none">
+<h2>2. The dot grid is rotated</h2>
+<p>Because the human visual system is tuned to perceive
+horizontal and vertical lines and features more clearly
+than other angles, it is common practice in halftoning
+to rotate the grid 45 degrees. This is a simple coordinate
+transformation, best performed by a 2x2 matrix multiplication.</p>
+</div>
+
+<script id="shader-fs-2" type="x-shader/x-fragment">
+#ifdef GL_ES
+precision highp float;
+#endif
+
+varying vec2 st; // Texcoords
+
+void main() {
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	float frequency = 10.0;
+	vec2 st2 = mat2(0.707, -0.707, 0.707, 0.707) * st;
+	vec2 nearest = 2.0*fract(frequency * st2) - 1.0;
+	float dist = length(nearest);
+	float radius = 0.5;
+	vec3 white = vec3(1.0, 1.0, 1.0);
+	vec3 black = vec3(0.0, 0.0, 0.0);
+	vec3 fragcolor = mix(black, white, step(radius, dist));
+	gl_FragColor = vec4(fragcolor, 1.0);
+}
+</script>
+
+<div id="caption-3" style="display:none">
+<h2>3. Anti-aliasing is required</h2>
+<p>Because of the thresholding, the circular dots have
+infinitely crisp edges and alias terribly. Aliasing is
+a very common problem for procedural textures, but it
+is mostly a simple matter to avoid it, or at the very
+least reduce it. For the kind of thresholding operation
+we perform in this case, we need to compute the variation
+of the thresholded function across the size of one fragment
+(typically one pixel) and perform a smooth blend between
+black and white across the width of one fragment. Thereby,
+if a fragment is sampled at a point near the boundary
+between the two extremes, it will be assigned a color
+which is a mix of the two.</p>
+<p>The correct and general way to do analytic anti-aliasing
+of a procedural pattern is to use the
+<span class="code">smoothstep()</span> function to replace
+all <span class="code">step()</span> functions, and use the
+automatic derivatives <span class="code">dFdx()</span> and
+<span class="code">dFdy()</span> to compute the
+step width. This enables fully anisotropic anti-aliasing
+of a high quality. The custom function
+<span class="code">aastep()</span> below demonstrates this.</p>
+<p class="note">Automatic derivatives are an optional extension
+in WebGL, and some implementations may not support it.
+If the extension is unavailable, we take a different,
+simplistic approach. To do it right without the convenience
+of auto derivatives requires explicit knowledge of the
+window size, the view transformation, the gradient in texture
+space and the relation between texture coordinates and world
+coordinates. To keep the code reasonably easy to understand,
+we stick with an imperfect isotropic anti-aliasing that works
+well enough face-on, but blurs the pattern too much in slanted
+views. Most WebGL implementations today (2012) support the
+auto derivatives extension, so this is mostly not a problem.</p>
+</div>
+
+<script id="shader-fs-3" type="x-shader/x-fragment">
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+
+varying vec2 st; // Texcoords
+
+float frequency = 10.0; // Needed globally for lame version of aastep()
+
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+void main() {
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	vec2 st2 = mat2(0.707, -0.707, 0.707, 0.707) * st;
+	vec2 nearest = 2.0*fract(frequency * st2) - 1.0;
+	float dist = length(nearest);
+	float radius = 0.5;
+	vec3 white = vec3(1.0, 1.0, 1.0);
+	vec3 black = vec3(0.0, 0.0, 0.0);
+	vec3 fragcolor = mix(black, white, aastep(radius, dist));
+	gl_FragColor = vec4(fragcolor, 1.0);
+}
+</script>
+
+<div id="caption-4" style="display:none">
+<h2>4. The dots vary in size</h2>
+<p>The purpose of halftoning is to reproduce an image.
+A varying reflectance is simulated by using black and white
+in different average proportions across the surface.
+We use a texture as input, and vary the threshold for the
+dot radius to make the white area proportional to the
+reflectance. Don't forget that the area of a circle varies
+with the square of its radius.</p>
+<p><img src="texture.png" /><br />
+The coarse halftoning in our example removes most fine
+details in the image, so we use a small 128x128 texture.
+We use the green channel of the RGB image as a grayscale
+value for now. Color will be added later, in step 8.</p>
+<p class="note">When the circles start touching
+each other, at radius 1.0, the area coverage is pi/4 or
+around 0.785, and after that the relation between radius
+and area coverage gets a little more complicated. We
+choose to ignore that and map color values in the range
+0 to 1 to a dot radius of 0.0 to 1.0 for clarity. As a
+consequence, the overall color will be too bright and
+desaturated, but the visual appearance of the pattern
+will be nice and clear.</p>
+</div>
+
+<script id="shader-fs-4" type="x-shader/x-fragment">
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+uniform sampler2D uSampler;
+
+varying vec2 st; // Texcoords
+
+float frequency = 40.0; // Needed globally for lame version of aastep()
+
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+void main() {
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	vec2 st2 = mat2(0.707, -0.707, 0.707, 0.707) * st;
+	vec2 nearest = 2.0*fract(frequency * st2) - 1.0;
+	float dist = length(nearest);
+	// Use a texture to modulate the size of the dots
+	vec3 texcolor = texture2D(uSampler, st).rgb; // Unrotated coords
+	float radius = sqrt(1.0-texcolor.g); // Use green channel
+	vec3 white = vec3(1.0, 1.0, 1.0);
+	vec3 black = vec3(0.0, 0.0, 0.0);
+	vec3 fragcolor = mix(black, white, aastep(radius, dist));
+	gl_FragColor = vec4(fragcolor, 1.0);
+}
+</script>
+
+<div id="caption-5" style="display:none">
+<h2>5. Built-in bilinear interpolation is insufficient</h2>
+<p>Depending on your particular OpenGL implementation, zooming in
+close on the pattern may look bad, revealing ugly sawtooth edges
+for the spots where the input image has a strong gradient, i.e.
+where dots change their radius rapidly. This happens because the
+built-in texture sampling assumes you are going to use the sample
+as a color value, and uses a reduced precision for the bilinear
+interpolation which is perfectly appropriate for that use.
+Our use here, however, utilizes the sample value to shift
+the position of a crisp edge, and then the limited precision
+becomes apparent. To fix that, we can perform our own bilinear
+texture interpolation in explicit shader code, as demonstrated
+by the function <span class="code">texture2D_bilinear()</span>
+below. While functionally equivalent to a hardware-interpolated
+bilinear sampling, it uses full floating point precision for
+the interpolation and does not create stair-stepping artefacts
+until we get into extreme close-ups and hit the precision limit
+for 32-bit floating point values. At extreme zoom levels you can
+still see some artefacts, but they occur at a much smaller scale.
+Our home-grown explicit bilinear interpolation comes at a cost, but
+it is not unreasonably time-consuming, and it works wonders
+for the quality of the output image in extreme close-ups.</p>
+<p class="note">One slight inconvenience in WebGL is that we
+need to supply the pixel dimensions of the texture image to the
+shader as a separate uniform variable. GLSL 1.30 introduced a
+function to ask a texture sampler about the resolution of the
+current texture image, but WebGL 1.0 lacks that functionality.
+</div>
+
+<script id="shader-fs-5" type="x-shader/x-fragment">
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+
+uniform sampler2D uSampler;
+uniform vec2 uDims;
+
+varying vec2 st; // Texcoords
+varying vec2 vOne; // 1.0/uDims
+
+float frequency = 40.0; // Needed globally for lame version of aastep()
+
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+// Explicit bilinear texture lookup to circumvent bad hardware precision.
+// The extra arguments specify the dimension of the texture. (GLSL 1.30
+// introduced textureSize() to get that information from the sampler.)
+// 'dims' is the width and height of the texture, 'one' is 1.0/dims.
+// (Precomputing 'one' saves two divisions for each lookup.)
+vec4 texture2D_bilinear(sampler2D tex, vec2 st, vec2 dims, vec2 one) {
+  vec2 uv = st * dims;
+  vec2 uv00 = floor(uv - vec2(0.5)); // Lower left corner of lower left texel
+  vec2 uvlerp = uv - uv00 - vec2(0.5); // Texel-local lerp blends [0,1]
+  vec2 st00 = (uv00 + vec2(0.5)) * one;
+  vec4 texel00 = texture2D(tex, st00);
+  vec4 texel10 = texture2D(tex, st00 + vec2(one.x, 0.0));
+  vec4 texel01 = texture2D(tex, st00 + vec2(0.0, one.y));
+  vec4 texel11 = texture2D(tex, st00 + one);
+  vec4 texel0 = mix(texel00, texel01, uvlerp.y); 
+  vec4 texel1 = mix(texel10, texel11, uvlerp.y); 
+  return mix(texel0, texel1, uvlerp.x);
+}
+
+void main() {
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	vec2 st2 = mat2(0.707, -0.707, 0.707, 0.707) * st;
+	vec2 nearest = 2.0*fract(frequency * st2) - 1.0;
+	float dist = length(nearest);
+	// Use a texture to modulate the size of the dots
+	vec3 texcolor = texture2D_bilinear(uSampler, st, uDims, vOne).rgb;
+	float radius = sqrt(1.0-texcolor.g); // Use green channel
+	vec3 white = vec3(1.0, 1.0, 1.0);
+	vec3 black = vec3(0.0, 0.0, 0.0);
+	vec3 fragcolor = mix(black, white, aastep(radius, dist));
+	gl_FragColor = vec4(fragcolor, 1.0);
+}
+</script>
+
+<div id="caption-6" style="display:none">
+<h2>6. The dots have irregular edges</h2>
+<p>Printing of any kind involves mechanical processes which
+introduce imperfections in the final halftone pattern.
+The most prominent defect is that the halftone dots will
+not be perfect circles, but somewhat irregular in shape.
+Perlin noise is a very useful tool to simulate this
+kind of irregularity.</p>
+<p>By adding some 2D noise to the threshold value before
+we perform the thresholding, we can distort the smooth
+outline and make it more wobbly. By adding a lot of noise,
+we can even create holes near the edge of the dots, and
+some splutter around them. For a nice appearance, we add
+three noise values of different scales to create a less
+regular-looking pattern. More noise values on successively
+finer scales would break up the edge in a more realistic
+manner, but it would only make a difference in close-up
+views, and we are more interested in speed and simplicity
+than extreme realism at a micro scale, so we leave it at
+three noise samples. If speed is crucial, even one noise
+sample could be enough.</p>
+<p class="note">It should be noted that this is a case
+where our alternate simplistic anti-aliasing breaks down
+and starts generating unwanted blur or reintroducing aliasing
+in close-up views. This is because the gradient of the
+function we are thresholding changes significantly with
+the added noise. A proper anti-aliasing either requires
+the automatic derivatives extension, or we need to know
+the derivative of our noise function as well. While it
+is perfectly possible to compute the analytic derivative
+of Perlin noise, or approximate it with finite differences,
+it is beyond the scope of this tutorial. Auto derivatives
+solve the problem well enough.</p>
+</div>
+
+<script id="shader-fs-6" type="x-shader/x-fragment">
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+
+uniform sampler2D uSampler;
+uniform vec2 uDims;
+
+varying vec2 st; // Texcoords
+varying vec2 vOne; // 1.0/uDims
+
+float frequency = 40.0; // Needed globally for lame version of aastep()
+
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+// Explicit bilinear texture lookup to circumvent bad hardware precision.
+// The extra arguments specify the dimension of the texture. (GLSL 1.30
+// introduced textureSize() to get that information from the sampler.)
+// 'dims' is the width and height of the texture, 'one' is 1.0/dims.
+// (Precomputing 'one' saves two divisions for each lookup.)
+vec4 texture2D_bilinear(sampler2D tex, vec2 st, vec2 dims, vec2 one) {
+  vec2 uv = st * dims;
+  vec2 uv00 = floor(uv - vec2(0.5)); // Lower left corner of lower left texel
+  vec2 uvlerp = uv - uv00 - vec2(0.5); // Texel-local lerp blends [0,1]
+  vec2 st00 = (uv00 + vec2(0.5)) * one;
+  vec4 texel00 = texture2D(tex, st00);
+  vec4 texel10 = texture2D(tex, st00 + vec2(one.x, 0.0));
+  vec4 texel01 = texture2D(tex, st00 + vec2(0.0, one.y));
+  vec4 texel11 = texture2D(tex, st00 + one);
+  vec4 texel0 = mix(texel00, texel01, uvlerp.y); 
+  vec4 texel1 = mix(texel10, texel11, uvlerp.y); 
+  return mix(texel0, texel1, uvlerp.x);
+}
+
+// Description : Array- and textureless GLSL 2D simplex noise.
+// Author : Ian McEwan, Ashima Arts. Version: 20110822
+// Copyright (C) 2011 Ashima Arts. All rights reserved.
+// Distributed under the MIT License. See LICENSE file.
+// https://github.com/ashima/webgl-noise
+
+vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 permute(vec3 x) { return mod289((( x * 34.0) + 1.0) * x); }
+
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                     -0.577350269189626,  // -1.0 + 2.0 * C.x
+                      0.024390243902439); // 1.0 / 41.0
+  // First corner
+  vec2 i = floor(v + dot(v, C.yy) );
+  vec2 x0 = v - i + dot(i, C.xx);
+  // Other corners
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  // Permutations
+  i = mod289(i); // Avoid truncation effects in permutation
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                           + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+                          dot(x12.zw,x12.zw)), 0.0);
+  m = m*m; m = m*m;
+  // Gradients
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 a0 = x - floor(x + 0.5);
+  // Normalise gradients implicitly by scaling m
+  m *= 1.792843 - 0.853735 * ( a0*a0 + h*h );
+  // Compute final noise value at P
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	vec2 st2 = mat2(0.707, -0.707, 0.707, 0.707) * st;
+	vec2 nearest = 2.0*fract(frequency * st2) - 1.0;
+	float dist = length(nearest);
+	// Use a texture to modulate the size of the dots
+	vec3 texcolor = texture2D_bilinear(uSampler, st, uDims, vOne).rgb;
+	float radius = sqrt(1.0-texcolor.g); // Use green channel
+	float n = 0.1*snoise(st*200.0); // Fractal noise
+	n += 0.05*snoise(st*400.0);
+	n += 0.025*snoise(st*800.0);
+	vec3 white = vec3(1.0, 1.0, 1.0);
+	vec3 black = vec3(0.0, 0.0, 0.0);
+	vec3 fragcolor = mix(black, white, aastep(radius, dist+n));
+	gl_FragColor = vec4(fragcolor, 1.0);
+}
+</script>
+
+<div id="caption-7" style="display:none">
+<h2>7. The paper and the ink have internal texture</h2>
+<p>The paper in a print is not a constant color, but has a
+slight variation in reflectance. While this is often
+mainly due to microscopic surface structure, we choose to
+simulate it by simply adding some noise to the white color.
+We already have one instance of 2D noise for the distortion
+of the shape of the spots, and we choose to re-use that
+instead of making yet another call to the noise function.</p>
+<p>The printed color is also uneven in appearance, partly due
+to the uneven structure of the paper, and partly due to
+variations in the ink transfer. We simulate this in a very
+simplistic but visually acceptable manner by once again
+adding 2D Perlin noise to a constant color, and once again
+re-using the previously computed noise value to reduce
+the computational workload.</p>
+</div>
+
+<script id="shader-fs-7" type="x-shader/x-fragment">
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+
+uniform sampler2D uSampler;
+uniform vec2 uDims;
+
+varying vec2 st; // Texcoords
+varying vec2 vOne; // 1.0/uDims
+
+float frequency = 40.0; // Needed globally for lame version of aastep()
+
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+// Explicit bilinear texture lookup to circumvent bad hardware precision.
+// The extra arguments specify the dimension of the texture. (GLSL 1.30
+// introduced textureSize() to get that information from the sampler.)
+// 'dims' is the width and height of the texture, 'one' is 1.0/dims.
+// (Precomputing 'one' saves two divisions for each lookup.)
+vec4 texture2D_bilinear(sampler2D tex, vec2 st, vec2 dims, vec2 one) {
+  vec2 uv = st * dims;
+  vec2 uv00 = floor(uv - vec2(0.5)); // Lower left corner of lower left texel
+  vec2 uvlerp = uv - uv00 - vec2(0.5); // Texel-local lerp blends [0,1]
+  vec2 st00 = (uv00 + vec2(0.5)) * one;
+  vec4 texel00 = texture2D(tex, st00);
+  vec4 texel10 = texture2D(tex, st00 + vec2(one.x, 0.0));
+  vec4 texel01 = texture2D(tex, st00 + vec2(0.0, one.y));
+  vec4 texel11 = texture2D(tex, st00 + one);
+  vec4 texel0 = mix(texel00, texel01, uvlerp.y); 
+  vec4 texel1 = mix(texel10, texel11, uvlerp.y); 
+  return mix(texel0, texel1, uvlerp.x);
+}
+
+// Description : Array- and textureless GLSL 2D simplex noise.
+// Author : Ian McEwan, Ashima Arts. Version: 20110822
+// Copyright (C) 2011 Ashima Arts. All rights reserved.
+// Distributed under the MIT License. See LICENSE file.
+// https://github.com/ashima/webgl-noise
+
+vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 permute(vec3 x) { return mod289((( x * 34.0) + 1.0) * x); }
+
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                     -0.577350269189626,  // -1.0 + 2.0 * C.x
+                      0.024390243902439); // 1.0 / 41.0
+  // First corner
+  vec2 i = floor(v + dot(v, C.yy) );
+  vec2 x0 = v - i + dot(i, C.xx);
+  // Other corners
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  // Permutations
+  i = mod289(i); // Avoid truncation effects in permutation
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                           + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+                          dot(x12.zw,x12.zw)), 0.0);
+  m = m*m; m = m*m;
+  // Gradients
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 a0 = x - floor(x + 0.5);
+  // Normalise gradients implicitly by scaling m
+  m *= 1.792843 - 0.853735 * ( a0*a0 + h*h );
+  // Compute final noise value at P
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	vec2 st2 = mat2(0.707, -0.707, 0.707, 0.707) * st;
+	vec2 nearest = 2.0*fract(frequency * st2) - 1.0;
+	float dist = length(nearest);
+	// Use a texture to modulate the size of the dots
+	vec3 texcolor = texture2D_bilinear(uSampler, st, uDims, vOne).rgb;
+	float radius = sqrt(1.0-texcolor.g); // Use green channel
+	float n = 0.1*snoise(st*200.0); // Fractal noise
+	n += 0.05*snoise(st*400.0);
+	n += 0.025*snoise(st*800.0);
+	vec3 white = vec3(n*0.5 + 0.98);
+	vec3 black = vec3(n + 0.1);
+	vec3 fragcolor = mix(black, white, aastep(radius, dist+n));
+	gl_FragColor = vec4(fragcolor, 1.0);
+}
+</script>
+
+<div id="caption-8" style="display:none">
+<h2>8. The halftone pattern is in color</h2>
+<p>A color image is reproduced by printing four primary
+colors: cyan, magenta, yellow and black (CMYK), with
+different grid angles. The three chromatic colors cyan,
+magenta and yellow are transparent by design, and to some
+extent even the black color is transparent. We finish up
+by computing all four color values and creating a color
+halftone pattern. The commonly used angles for the CMYK
+primaries are 15, 75, 0 and 45 degrees. The method for
+generating four CMYK channels from three RGB channels
+is a rather complex procedure, but here we use a much
+simplified conversion where CMY = 1 - RGB, the K component
+is set to the maximum of C, M and Y, and the K value
+is subtracted from the CMY values.</p>
+<p>Graphic arts professionals would shudder at this
+extreme simplification, but it creates a plausible
+visual appearance for demonstration purposes.<br />
+<img src="texture.png" /></p>
+</div>
+
+<script id="shader-fs-8" type="x-shader/x-fragment">
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+
+uniform sampler2D uSampler;
+uniform vec2 uDims;
+
+varying vec2 st; // Texcoords
+varying vec2 vOne; // 1.0/uDims
+
+float frequency = 40.0; // Needed globally for lame version of aastep()
+
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+// Explicit bilinear texture lookup to circumvent bad hardware precision.
+// The extra arguments specify the dimension of the texture. (GLSL 1.30
+// introduced textureSize() to get that information from the sampler.)
+// 'dims' is the width and height of the texture, 'one' is 1.0/dims.
+// (Precomputing 'one' saves two divisions for each lookup.)
+vec4 texture2D_bilinear(sampler2D tex, vec2 st, vec2 dims, vec2 one) {
+  vec2 uv = st * dims;
+  vec2 uv00 = floor(uv - vec2(0.5)); // Lower left corner of lower left texel
+  vec2 uvlerp = uv - uv00 - vec2(0.5); // Texel-local lerp blends [0,1]
+  vec2 st00 = (uv00 + vec2(0.5)) * one;
+  vec4 texel00 = texture2D(tex, st00);
+  vec4 texel10 = texture2D(tex, st00 + vec2(one.x, 0.0));
+  vec4 texel01 = texture2D(tex, st00 + vec2(0.0, one.y));
+  vec4 texel11 = texture2D(tex, st00 + one);
+  vec4 texel0 = mix(texel00, texel01, uvlerp.y); 
+  vec4 texel1 = mix(texel10, texel11, uvlerp.y); 
+  return mix(texel0, texel1, uvlerp.x);
+}
+
+// Description : Array- and textureless GLSL 2D simplex noise.
+// Author : Ian McEwan, Ashima Arts. Version: 20110822
+// Copyright (C) 2011 Ashima Arts. All rights reserved.
+// Distributed under the MIT License. See LICENSE file.
+// https://github.com/ashima/webgl-noise
+
+vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 permute(vec3 x) { return mod289((( x * 34.0) + 1.0) * x); }
+
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                     -0.577350269189626,  // -1.0 + 2.0 * C.x
+                      0.024390243902439); // 1.0 / 41.0
+  // First corner
+  vec2 i = floor(v + dot(v, C.yy) );
+  vec2 x0 = v - i + dot(i, C.xx);
+  // Other corners
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  // Permutations
+  i = mod289(i); // Avoid truncation effects in permutation
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                           + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+                          dot(x12.zw,x12.zw)), 0.0);
+  m = m*m; m = m*m;
+  // Gradients
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 a0 = x - floor(x + 0.5);
+  // Normalise gradients implicitly by scaling m
+  m *= 1.792843 - 0.853735 * ( a0*a0 + h*h );
+  // Compute final noise value at P
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+	// Use a texture to modulate the size of the dots
+	vec3 texcolor = texture2D_bilinear(uSampler, st, uDims, vOne).rgb;
+
+	float n = 0.1*snoise(st*200.0); // Fractal noise
+	n += 0.05*snoise(st*400.0);
+	n += 0.025*snoise(st*800.0);
+	vec3 white = vec3(n*0.2 + 0.97);
+	vec3 black = vec3(n + 0.1);
+
+	// Perform a rough RGB-to-CMYK conversion
+	vec4 cmyk;
+	cmyk.xyz = 1.0 - texcolor;
+	cmyk.w = min(cmyk.x, min(cmyk.y, cmyk.z)); // Create K
+	cmyk.xyz -= cmyk.w; // Subtract K equivalent from CMY
+
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	vec2 Kst = frequency*mat2(0.707, -0.707, 0.707, 0.707)*st;
+	vec2 Kuv = 2.0*fract(Kst)-1.0;
+	float k = aastep(0.0, sqrt(cmyk.w)-length(Kuv)+n);
+	vec2 Cst = frequency*mat2(0.966, -0.259, 0.259, 0.966)*st;
+	vec2 Cuv = 2.0*fract(Cst)-1.0;
+	float c = aastep(0.0, sqrt(cmyk.x)-length(Cuv)+n);
+	vec2 Mst = frequency*mat2(0.966, 0.259, -0.259, 0.966)*st;
+	vec2 Muv = 2.0*fract(Mst)-1.0;
+	float m = aastep(0.0, sqrt(cmyk.y)-length(Muv)+n);
+	vec2 Yst = frequency*st; // 0 deg
+	vec2 Yuv = 2.0*fract(Yst)-1.0;
+	float y = aastep(0.0, sqrt(cmyk.z)-length(Yuv)+n);
+
+	vec3 rgbscreen = 1.0 - 0.9*vec3(c,m,y) + n;
+	rgbscreen = mix(rgbscreen, black, 0.85*k + 0.3*n);
+
+	gl_FragColor = vec4(rgbscreen, 1.0);
+}
+</script>
+
+<div id="caption-9" style="display:none">
+<h2>9. The pattern still aliases at a distance</h2>
+<p>We have solved the problem of magnification by using a
+smoothstep thresholding with a view-dependent size for the
+transition region, but minification is still a problem.
+In image based texture mapping, this is handled by mipmapping,
+but a point-based evaluation of a shader is not ideal for
+computing a large area average, which is what a mipmap does.</p>
+<p>Fortunately, the aim of halftoning is to look like the
+original image at a distance, and we already have the original
+image as a texture sample. All that is required to solve our
+minification problem is to decide on a transition point where
+it is better to use the original texture instead of the halftone
+pattern, and perform a smooth blend between the two. We choose to
+blend in the original texture when the halftone dots
+are around the size of one fragment.</p>
+<p class="note">Note that if auto derivatives are not supported,
+anti-aliasing is performed in a simplistic, isotropic manner
+and the blending to a regular texture image will happen too
+soon in oblique views, but at least we get rid of the strong
+and highly disturbing aliasing for distant views.
+</div>
+
+<script id="shader-fs-9" type="x-shader/x-fragment">
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+
+uniform sampler2D uSampler;
+uniform vec2 uDims;
+
+varying vec2 st; // Texcoords
+varying vec2 vOne; // 1.0/uDims
+
+float frequency = 40.0; // Needed globally for lame version of aastep()
+
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+// Explicit bilinear texture lookup to circumvent bad hardware precision.
+// The extra arguments specify the dimension of the texture. (GLSL 1.30
+// introduced textureSize() to get that information from the sampler.)
+// 'dims' is the width and height of the texture, 'one' is 1.0/dims.
+// (Precomputing 'one' saves two divisions for each lookup.)
+vec4 texture2D_bilinear(sampler2D tex, vec2 st, vec2 dims, vec2 one) {
+  vec2 uv = st * dims;
+  vec2 uv00 = floor(uv - vec2(0.5)); // Lower left corner of lower left texel
+  vec2 uvlerp = uv - uv00 - vec2(0.5); // Texel-local lerp blends [0,1]
+  vec2 st00 = (uv00 + vec2(0.5)) * one;
+  vec4 texel00 = texture2D(tex, st00);
+  vec4 texel10 = texture2D(tex, st00 + vec2(one.x, 0.0));
+  vec4 texel01 = texture2D(tex, st00 + vec2(0.0, one.y));
+  vec4 texel11 = texture2D(tex, st00 + one);
+  vec4 texel0 = mix(texel00, texel01, uvlerp.y); 
+  vec4 texel1 = mix(texel10, texel11, uvlerp.y); 
+  return mix(texel0, texel1, uvlerp.x);
+}
+
+// Description : Array- and textureless GLSL 2D simplex noise.
+// Author : Ian McEwan, Ashima Arts. Version: 20110822
+// Copyright (C) 2011 Ashima Arts. All rights reserved.
+// Distributed under the MIT License. See LICENSE file.
+// https://github.com/ashima/webgl-noise
+
+vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 permute(vec3 x) { return mod289((( x * 34.0) + 1.0) * x); }
+
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                     -0.577350269189626,  // -1.0 + 2.0 * C.x
+                      0.024390243902439); // 1.0 / 41.0
+  // First corner
+  vec2 i = floor(v + dot(v, C.yy) );
+  vec2 x0 = v - i + dot(i, C.xx);
+  // Other corners
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  // Permutations
+  i = mod289(i); // Avoid truncation effects in permutation
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                           + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+                          dot(x12.zw,x12.zw)), 0.0);
+  m = m*m; m = m*m;
+  // Gradients
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 a0 = x - floor(x + 0.5);
+  // Normalise gradients implicitly by scaling m
+  m *= 1.792843 - 0.853735 * ( a0*a0 + h*h );
+  // Compute final noise value at P
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+void main() {
+	// Use a texture to modulate the size of the dots
+	vec3 texcolor = texture2D_bilinear(uSampler, st, uDims, vOne).rgb;
+
+	float n = 0.1*snoise(st*200.0); // Fractal noise
+	n += 0.05*snoise(st*400.0);
+	n += 0.025*snoise(st*800.0);
+	vec3 white = vec3(n*0.2 + 0.97);
+	vec3 black = vec3(n + 0.1);
+
+	// Perform a rough RGB-to-CMYK conversion
+	vec4 cmyk;
+	cmyk.xyz = 1.0 - texcolor;
+	cmyk.w = min(cmyk.x, min(cmyk.y, cmyk.z)); // Create K
+	cmyk.xyz -= cmyk.w; // Subtract K equivalent from CMY
+
+	// Distance to nearest point in a grid of
+	// (frequency x frequency) points over the unit square
+	vec2 Kst = frequency*mat2(0.707, -0.707, 0.707, 0.707)*st;
+	vec2 Kuv = 2.0*fract(Kst)-1.0;
+	float k = aastep(0.0, sqrt(cmyk.w)-length(Kuv)+n);
+	vec2 Cst = frequency*mat2(0.966, -0.259, 0.259, 0.966)*st;
+	vec2 Cuv = 2.0*fract(Cst)-1.0;
+	float c = aastep(0.0, sqrt(cmyk.x)-length(Cuv)+n);
+	vec2 Mst = frequency*mat2(0.966, 0.259, -0.259, 0.966)*st;
+	vec2 Muv = 2.0*fract(Mst)-1.0;
+	float m = aastep(0.0, sqrt(cmyk.y)-length(Muv)+n);
+	vec2 Yst = frequency*st; // 0 deg
+	vec2 Yuv = 2.0*fract(Yst)-1.0;
+	float y = aastep(0.0, sqrt(cmyk.z)-length(Yuv)+n);
+
+	vec3 rgbscreen = 1.0 - 0.9*vec3(c,m,y) + n;
+	rgbscreen = mix(rgbscreen, black, 0.85*k + 0.3*n);
+
+#ifdef GL_OES_standard_derivatives
+	float afwidth = 2.0 * frequency * max(length(dFdx(st)), length(dFdy(st)));
+#else
+	float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+	float blend = smoothstep(0.7, 1.4, afwidth); 
+	gl_FragColor = vec4(mix(rgbscreen, texcolor, blend), 1.0);
+}
+</script>
+
+<div id="caption-10" style="display:none">
+<h2>10. Readability!</h2>
+<p>Shader programming is a visual, agile, incremental and
+creative process, often performed by one person. It is
+infamous for encouraging bad programming practice, but
+it is not lawless land. Readability, style, re-use and
+documentation matters, as in any kind of programming.
+The first working version of the code is often a mess.
+If we are hoping to use the code for anything at all,
+including saving it for later use or presenting it to
+others, it is highly recommended to take some time to clean
+it up. Remove unnecessary clutter, make sure you have relevant
+names for variables and functions, write informative comments,
+and last but not least, include your name and a date in a
+comment header, along with any license restrictions you may
+want to place on the code.</p>
+<p>This example was written with extra care and cleaned up
+for presentation, and the steps leading up to the final shader
+have been edited to have consistent structure and variable
+naming. Therefore, the previous step shows code that is already
+reasonably clear and readable. Still, it could benefit from
+more comments, so let's add that. The shader below is good
+enough for presentation and re-use.</p>
+<p class="note">In any ordinary programming language, the
+functions <span class="code">snoise()</span>,
+<span class="code">aastep()</span> and
+<span class="code">texture2D_bilinear()</span> could
+of course have been moved to separate files for better
+clarity and ease of re-use, but GLSL is a language
+with a very rudimentary linker, and putting everything
+in one file is a common and accepted programming style.</p>
+</div>
+
+<script id="shader-fs-10" type="x-shader/x-fragment">
+// GLSL halftone shader demo for WebGL
+// Stefan Gustavson 2012-02-16 (stefan.gustavson@liu.se)
+//
+// 2D simplex noise by Ian McEwan, distributed under
+// the MIT license. All other code in this shader is
+// my original work, and is in the public domain.
+// Credit is appreciated where appropriate, though.
+
+// Derivatives may be missing from some WebGL implementations,
+// so we allow for a less general, alternate approach below.
+#ifdef GL_OES_standard_derivatives
+#extension GL_OES_standard_derivatives : enable
+#endif
+
+#ifdef GL_ES
+precision highp float;
+#endif
+
+uniform sampler2D uSampler; // The image to reproduce as a halftone
+uniform vec2 uDims; // Texture dimensions, in pixels (width, height)
+
+#ifndef GL_OES_standard_derivatives
+uniform float uScale; // For imperfect, isotropic anti-aliasing in
+uniform float uYrot;  // absence of dFdx() and dFdy() functions
+#endif
+
+varying vec2 st; // Texcoords
+varying vec2 vOne; // 1.0/uDims, precomputed vertex shader for speed
+
+float frequency = 40.0; // Needed globally for lame version of aastep()
+
+// Anti-aliased step function. If the auto derivatives extension
+// is supported, the AA is done in a fully general, anisotropic
+// manner. If not, the expression for "afwidth" is a kludge for
+// this particular shader and this particular view transform.
+float aastep(float threshold, float value) {
+#ifdef GL_OES_standard_derivatives
+  float afwidth = 0.7 * length(vec2(dFdx(value), dFdy(value)));
+#else
+  // Kludge: isotropic and hard-coded for canvas size 400 px
+  float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+  return smoothstep(threshold-afwidth, threshold+afwidth, value);
+}
+
+// Explicit bilinear texture lookup to circumvent bad hardware precision.
+// The extra arguments specify the dimension of the texture. (GLSL 1.30
+// introduced textureSize() to get that information from the sampler.)
+// 'dims' is the width and height of the texture, 'one' is 1.0/dims.
+// (Precomputing 'one' saves two divisions for each lookup.)
+vec4 texture2D_bilinear(sampler2D tex, vec2 st, vec2 dims, vec2 one) {
+  vec2 uv = st * dims;
+  vec2 uv00 = floor(uv - vec2(0.5)); // Lower left corner of lower left texel
+  vec2 uvlerp = uv - uv00 - vec2(0.5); // Texel-local lerp blends [0,1]
+  vec2 st00 = (uv00 + vec2(0.5)) * one;
+  vec4 texel00 = texture2D(tex, st00);
+  vec4 texel10 = texture2D(tex, st00 + vec2(one.x, 0.0));
+  vec4 texel01 = texture2D(tex, st00 + vec2(0.0, one.y));
+  vec4 texel11 = texture2D(tex, st00 + one);
+  vec4 texel0 = mix(texel00, texel01, uvlerp.y); 
+  vec4 texel1 = mix(texel10, texel11, uvlerp.y); 
+  return mix(texel0, texel1, uvlerp.x);
+}
+
+// 2D simplex noise
+
+// Description : Array- and textureless GLSL 2D simplex noise.
+// Author : Ian McEwan, Ashima Arts. Version: 20110822
+// Copyright (C) 2011 Ashima Arts. All rights reserved.
+// Distributed under the MIT License. See LICENSE file.
+// https://github.com/ashima/webgl-noise
+
+vec2 mod289(vec2 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+vec3 permute(vec3 x) { return mod289((( x * 34.0) + 1.0) * x); }
+
+float snoise(vec2 v) {
+  const vec4 C = vec4(0.211324865405187,  // (3.0-sqrt(3.0))/6.0
+                      0.366025403784439,  // 0.5*(sqrt(3.0)-1.0)
+                     -0.577350269189626,  // -1.0 + 2.0 * C.x
+                      0.024390243902439); // 1.0 / 41.0
+  // First corner
+  vec2 i = floor(v + dot(v, C.yy) );
+  vec2 x0 = v - i + dot(i, C.xx);
+  // Other corners
+  vec2 i1 = (x0.x > x0.y) ? vec2(1.0, 0.0) : vec2(0.0, 1.0);
+  vec4 x12 = x0.xyxy + C.xxzz;
+  x12.xy -= i1;
+  // Permutations
+  i = mod289(i); // Avoid truncation effects in permutation
+  vec3 p = permute( permute( i.y + vec3(0.0, i1.y, 1.0 ))
+                           + i.x + vec3(0.0, i1.x, 1.0 ));
+  vec3 m = max(0.5 - vec3(dot(x0,x0), dot(x12.xy,x12.xy),
+                          dot(x12.zw,x12.zw)), 0.0);
+  m = m*m; m = m*m;
+  // Gradients
+  vec3 x = 2.0 * fract(p * C.www) - 1.0;
+  vec3 h = abs(x) - 0.5;
+  vec3 a0 = x - floor(x + 0.5);
+  // Normalise gradients implicitly by scaling m
+  m *= 1.792843 - 0.853735 * ( a0*a0 + h*h );
+  // Compute final noise value at P
+  vec3 g;
+  g.x = a0.x * x0.x + h.x * x0.y;
+  g.yz = a0.yz * x12.xz + h.yz * x12.yw;
+  return 130.0 * dot(m, g);
+}
+
+// 2D simplex noise end
+
+void main() {
+	// Use a texture to modulate the size of the dots, and
+	// use explicit bilinear interpolation for better precision
+	vec3 texcolor = texture2D_bilinear(uSampler, st, uDims, vOne).rgb;
+
+	float n = 0.1*snoise(st*200.0);  // Fractal noise
+	n += 0.05*snoise(st*400.0);      // with three
+	n += 0.025*snoise(st*800.0);     // octaves
+	vec3 white = vec3(n*0.2 + 0.97); // Paper color + noise
+	vec3 black = vec3(n + 0.1);      // Ink density + noise
+
+	// Perform a crude RGB-to-CMYK conversion
+	vec4 cmyk;
+	cmyk.xyz = 1.0 - texcolor; // CMY = 1-RGB
+	// Black generation: K = min(C,M,Y)
+	cmyk.w = min(cmyk.x, min(cmyk.y, cmyk.z));
+	// Grey component replacement: subtract K from CMY
+	cmyk.xyz -= cmyk.w;
+
+	// Distances to nearest point in angled grids of
+	// (frequency x frequency) points over the unit square
+	// K component: 45 degrees screen angle
+	vec2 Kst = frequency*mat2(0.707, -0.707, 0.707, 0.707)*st;
+	vec2 Kuv = 2.0*fract(Kst)-1.0;
+	float k = aastep(0.0, sqrt(cmyk.w)-length(Kuv)+n);
+	// C component: 15 degrees screen angle
+	vec2 Cst = frequency*mat2(0.966, -0.259, 0.259, 0.966)*st;
+	vec2 Cuv = 2.0*fract(Cst)-1.0;
+	float c = aastep(0.0, sqrt(cmyk.x)-length(Cuv)+n);
+	// M component: -15 degrees screen angle
+	vec2 Mst = frequency*mat2(0.966, 0.259, -0.259, 0.966)*st;
+	vec2 Muv = 2.0*fract(Mst)-1.0;
+	float m = aastep(0.0, sqrt(cmyk.y)-length(Muv)+n);
+	// Y component: 0 degrees screen angle
+	vec2 Yst = frequency*st;
+	vec2 Yuv = 2.0*fract(Yst)-1.0;
+	float y = aastep(0.0, sqrt(cmyk.z)-length(Yuv)+n);
+
+	// CMY screen in RGB
+	vec3 rgbscreen = 1.0 - 0.9*vec3(c,m,y) + n;
+	// Blend in K for final color
+	rgbscreen = mix(rgbscreen, black, 0.85*k + 0.3*n);
+
+	// Blend to plain RGB texture under extreme minification
+	// (handles any minification level by regular mipmapping)
+#ifdef GL_OES_standard_derivatives
+	float afwidth = 2.0 * frequency * max(length(dFdx(st)), length(dFdy(st)));
+#else
+	float afwidth = frequency * (1.0/200.0) / uScale / cos(uYrot);
+#endif
+    float blend = smoothstep(0.7, 1.4, afwidth); 
+	gl_FragColor = vec4(mix(rgbscreen, texcolor, blend), 1.0);
+}
+</script>
+
+<script id="shader-vs" type="x-shader/x-vertex">
+	attribute vec3 aVertexPosition;
+	attribute vec2 aTextureCoord;
+  
+	uniform float uXoffset;
+	uniform float uYoffset;
+	uniform float uScale;
+	uniform float uXrot;
+	uniform float uYrot;
+	uniform vec2 uDims;
+
+	varying vec2 st; // texcoords
+	varying vec2 vOne; // 1.0/uDims
+
+	void main(void) {
+		// TODO: Rewrite all this to use a view matrix instead
+		float sinx = sin(uXrot);
+		float cosx = cos(uXrot);
+		float siny = sin(uYrot);
+		float cosy = cos(uYrot);
+		vec3 pos = mat3(cosx, sinx, 0.0, -sinx, cosx, 0.0, 0.0, 0.0, 1.0) * aVertexPosition;
+		pos = mat3(1.0, 0.0, 0.0, 0.0, cosy, siny, 0.0, -siny, cosy) * pos;
+		pos = pos + 0.9 * vec3(uXoffset, uYoffset, 0.0); // 0.9 to emphasize aliasing
+		pos = pos * uScale;
+		gl_Position = vec4(pos.xy, 0.0, 0.2*(5.0-pos.z)); // Hack: set z=0 to avoid clipping
+		st = aTextureCoord;
+		vOne = 1.0/uDims; // Saves two divisions in the fragment shader
+	}
+</script>
+
+</body>
+
+</html>
