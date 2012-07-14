@@ -1,0 +1,27 @@
+#version 330 core
+
+#define POSITION		0
+#define TEXCOORD		1
+
+
+uniform mat4 MVP;
+uniform vec4 frameRcpFrame;
+
+layout(location = POSITION) in vec2 Position;
+layout(location = TEXCOORD) in vec2 Texcoord;
+
+out block
+{
+	noperspective vec2 Texcoord;
+	noperspective vec4 fxaa_ConsolePosPos;
+} Out;
+
+void main()
+{	
+	Out.Texcoord = Texcoord;
+	/*vec2 fPos = Texcoord*frameRcpFrame.xy;
+	Out.fxaa_ConsolePosPos = vec4( (fPos+vec2(0.0,1.0))*frameRcpFrame.zw , (fPos+vec2(1.0,0.0))*frameRcpFrame.zw );*/
+	Out.fxaa_ConsolePosPos = vec4( Texcoord+vec2(0.0,1.0)*frameRcpFrame.zw , Texcoord+vec2(1.0,0.0)*frameRcpFrame.zw );
+	gl_Position = vec4(Position, 0.0, 1.0);
+}
+
