@@ -1,0 +1,11 @@
+---------------------------------------------------
+This folder should contain the following files:
+
+adl_defines.h
+adl_sdk.h
+adl_structures.h                                                                                  
+---------------------------------------------------
+The files can be downloaded from the following URL:
+
+http://developer.amd.com/sdks/ADLSDK/Pages/default.aspx
+---------------------------------------------------                                                                                                                                                                                                     

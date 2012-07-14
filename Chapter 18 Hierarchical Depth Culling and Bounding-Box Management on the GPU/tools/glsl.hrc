@@ -1,0 +1,363 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    GLSL shaders
+    Dmitry Malyshev <kvarkus@gmail.com>
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+  <type name="glsl" access="public">
+
+    <import type="def"/>
+
+    <region name="LineComment" parent="def:LineComment"/>
+    <region name="Comment" parent="def:Comment"/>
+
+    <region name="Number" parent="def:Number"/>
+    <region name="Symbol" parent="def:Symbol"/>
+    <region name="StructureSymbol" parent="def:SymbolStrong"/>
+    <region name="PrefixSymbol" parent="def:SymbolStrong"/>
+
+    <region name="Preproc" parent="def:Directive"/>
+    <region name="PreprocSpec" parent="def:KeywordStrong"/>
+    <region name="PreprocWord" parent="def:DirectiveContent"/>
+
+
+    <scheme name="glsl">
+      <inherit scheme="Preproc"/>
+      <inherit scheme="Comments"/>
+      <inherit scheme="BuiltIn"/>
+      <inherit scheme="TypeDeclaration"/>
+
+      <keywords region="def:SymbolStrong">
+        <symb name=";"/>
+      </keywords>
+
+      <regexp match="/^(layout)\((points|lines|triangles)\)\s*(in)/"
+              region1="def:Keyword" region2="def:Register" region3="def:InterfaceKeyword"/>
+      <regexp match="/^(layout)\((points|line_strip|triangle_strip)(,\s*(max_vertices)\s*=\s*\d+)?\)\s+(out)/"
+              region1="def:Keyword" region2="def:Register" region4="def:Parameter" region5="def:InterfaceKeyword"/>
+
+      <keywords region="def:Keyword">
+        <word name="precision"/>
+        <word name="struct"/>
+        <word name="main"/>
+      </keywords>
+
+      <keywords region="def:Register">
+        <word name='perspective'/>
+        <word name='noperspective'/>
+        <word name='centroid'/>
+        <word name='flat'/>
+        <word name='smooth'/>
+        <word name='vairant'/>
+        <word name='invariant'/>
+      </keywords>
+    </scheme>
+
+    
+    <scheme name="BuiltIn">
+      <!--regexp match="/(gl_\w+)/" region0="def:Character"/-->
+      <keywords region="def:Character">
+        <word name="gl_PerVertex"/>
+        <word name="gl_Position"/>
+	<word name="gl_PointSize"/>
+        <word name="gl_ClipDistance"/>
+        <word name="gl_Layer"/>
+        <word name="gl_PrimitiveIDIn"/>	
+        <word name="gl_PrimitiveID"/>
+        <word name="gl_FragCoord"/>
+        <word name="gl_FrontFacing"/>
+        <word name="gl_FragDepth"/>
+        <word name="gl_PointCoord"/>
+        <word name="gl_VertexID"/>
+        <word name="gl_InstanceID"/>
+      </keywords>
+    </scheme>
+
+    
+    <scheme name="Preproc">
+      <inherit scheme="Comments"/>
+      <regexp match="/\#/" region="PreprocWord"/>
+
+      <keywords region="def:Keyword">
+        <word name="core"/>
+      </keywords>
+      
+      <keywords region="PreprocWord">
+        <word name="version"/>
+        <word name="extension"/>
+        <word name="define"/>
+        <word name="defined"/>
+        <word name="elif"/>
+        <word name="else"/>
+        <word name="endif"/>
+        <word name="error"/>
+        <word name="if"/>
+        <word name="ifdef"/>
+        <word name="ifndef"/>
+        <word name="include"/>
+        <word name="line"/>
+        <word name="pragma"/>
+        <word name="undef"/>
+      </keywords>
+    </scheme>
+
+
+    <scheme name="Comments">
+      <regexp match="/\/\/(.*)$/" region0="LineComment"/>
+      <block start="/\/\*/" end="/\*\//" scheme="Comment"
+        region="Comment" region00="def:PairStart" region10="def:PairEnd"/>
+    </scheme>
+
+   
+    <scheme name="Expression">
+      <inherit scheme="def:CHexNumber"/>
+      <inherit scheme="def:FloatNumber"/>
+      <inherit scheme="def:DecNumber"/>
+
+      <keywords region="def:Symbol">
+        <!--Trigonometry-->
+        <word name="radians"/>
+        <word name="degrees"/>
+        <word name="sin"/>
+        <word name="cos"/>
+        <word name="tan"/>
+        <word name="asin"/>
+        <word name="acos"/>
+        <word name="atan"/>
+        <word name="sinh"/>
+        <word name="cosh"/>
+        <word name="tanh"/>
+        <word name="asinh"/>
+        <word name="acosh"/>
+        <word name="atanh"/>
+        <!--Exponent-->
+        <word name="pow"/>
+        <word name="exp"/>
+        <word name="log"/>
+        <word name="exp2"/>
+        <word name="log2"/>
+        <word name="sqrt"/>
+        <word name="inversesqrt"/>
+        <!--Common-->
+        <word name="abs"/>
+        <word name="sign"/>
+        <word name="floor"/>
+        <word name="trunc"/>
+        <word name="round"/>
+        <word name="roundEven"/>
+        <word name="ceil"/>
+        <word name="fract"/>
+        <word name="mod"/>
+        <word name="modf"/>
+        <word name="min"/>
+        <word name="max"/>
+        <word name="clamp"/>
+        <word name="mix"/>
+        <word name="step"/>
+        <word name="smoothstep"/>
+        <word name="isnan"/>
+        <word name="isinf"/>
+        <!--Geometric-->
+        <word name="length"/>
+        <word name="distance"/>
+        <word name="dot"/>
+        <word name="cross"/>
+        <word name="normalize"/>
+        <word name="faceforward"/>
+        <word name="reflect"/>
+        <word name="refract"/>
+        <!--Matrix-->
+        <word name="compMatrixMult"/>
+        <word name="outerProduct"/>
+        <word name="transpose"/>
+        <word name="determinant"/>
+        <word name="inverse"/>
+        <!--Bool-->
+        <word name="lessThan"/>
+        <word name="lessThanEqual"/>
+        <word name="greaterThan"/>
+        <word name="greaterThanEqual"/>
+        <word name="equal"/>
+        <word name="notEqual"/>
+        <word name="any"/>
+        <word name="all"/>
+        <word name="not"/>
+        <!--Texture-->
+        <word name="textureSize"/>
+        <word name="texture"/>
+        <word name="textureProj"/>
+        <word name="textureLod"/>
+        <word name="textureOffset"/>
+        <word name="texelFetch"/>
+        <word name="texelFetchOffset"/>
+        <word name="textureProjOffset"/>
+        <word name="textureLodOffset"/>
+        <word name="textureProjLod"/>
+        <word name="textureProjLodOffset"/>
+        <word name="textureGrad"/>
+        <word name="textureGradOffset"/>
+        <word name="textureProjGrad"/>
+        <word name="textureProjGradOffset"/>
+        <!--Fragment-->
+        <word name="dFdx"/>
+        <word name="dFdy"/>
+        <word name="fwidth"/>
+        <!--Noise-->
+        <word name="noise1"/>
+        <word name="noise2"/>
+        <word name="noise3"/>
+        <word name="noise4"/>
+        <!--Geometry-->
+        <word name="EmitVertex"/>
+        <word name="EndPrimitive"/>
+      </keywords>
+
+      <keywords region="def:Operator">
+        <symb name="="/>
+        <symb name="+"/>
+        <symb name="-"/>
+        <symb name="/"/>
+        <symb name="*"/>
+        <symb name="&amp;"/>
+        <symb name="&lt;"/>
+        <symb name="&gt;"/>
+        <symb name="^"/>
+        <symb name="|"/>
+        <symb name=":"/>
+        <symb name="!"/>
+        <symb name="~"/>
+        <symb name="%"/>
+        <symb name="?"/>
+      </keywords>
+    </scheme>
+
+    
+    <scheme name="Code">
+      <inherit scheme="Preproc"/>
+      <inherit scheme="Comments"/>
+      <inherit scheme="TypeDeclaration"/>
+      <inherit scheme="Expression"/>
+      <inherit scheme="BuiltIn"/>
+      
+      <keywords region="def:Keyword">
+        <word name="break"/>
+        <word name="continue"/>
+        <word name="while"/>
+        <word name="do"/>
+        <word name="switch"/>
+        <word name="case"/>
+        <word name="default"/>
+        <word name="true"/>
+        <word name="false"/>
+        <word name="for"/>
+        <word name="if"/>
+        <word name="else"/>
+        <word name="discard"/>
+        <word name="return"/>
+      </keywords>
+    </scheme>
+
+
+    <scheme name="TypeDeclaration">
+      <inherit scheme="Expression"/>
+      <!--inherit scheme="Code"/-->
+
+      <block start="/\{/" end="/\}/" scheme="Code"
+          region00="def:PairStart" region10="def:PairEnd"/>
+      
+      <keywords region="def:Parameter">
+        <word name='lowp'/>
+        <word name='mediump'/>
+        <word name='highp'/>
+      </keywords>
+
+      <keywords region="def:InterfaceKeyword">
+        <word name='attribute'/>
+        <word name='varying'/>
+        <word name='uniform'/>
+        <word name='in'/>
+        <word name='out'/>
+        <word name='inout'/>
+        <word name='const'/>
+      </keywords>
+
+      <keywords region="def:Symbol">
+        <symb name=","/>
+        <symb name="."/>
+      </keywords>
+
+      <keywords region="def:TypeKeyword">
+        <!--Standard-->
+        <word name='void'/>
+        <word name='bool'/>
+        <word name='int'/>
+        <word name='uint'/>
+        <word name='short'/>
+        <word name='ushort'/>
+        <word name='float'/>
+        <!--Vectors-->
+        <word name='vec2'/>
+        <word name='vec3'/>
+        <word name='vec4'/>
+        <word name='ivec2'/>
+        <word name='ivec3'/>
+        <word name='ivec4'/>
+        <word name='uvec2'/>
+        <word name='uvec3'/>
+        <word name='uvec4'/>
+        <!--Matrices-->
+        <word name='mat2'/>
+        <word name='mat3'/>
+        <word name='mat4'/>
+        <word name='mat2x3'/>
+        <word name='mat2x4'/>
+        <word name='mat3x2'/>
+        <word name='mat3x4'/>
+        <word name='mat4x2'/>
+        <word name='mat4x3'/>
+        <!--Samplers: Float-->
+        <word name='sampler1D'/>
+        <word name='sampler2D'/>
+        <word name='sampler3D'/>
+        <word name='samplerCube'/>
+	<word name='samplerCubeShadow'/>
+        <word name='sampler2DRect'/>
+        <word name='sampler1DShadow'/>
+        <word name='sampler2DShadow'/>
+        <word name='sampler2DRectShadow'/>
+        <word name='sampler1DArray'/>
+        <word name='sampler2DArray'/>
+        <word name='sampler1DArrayShadow'/>
+        <word name='sampler2DArrayShadow'/>
+        <word name='samplerBuffer'/>
+        <word name='sampler2DMS'/>
+        <word name='sampler2DMSArray'/>
+        <!--Samplers: Fixed-->
+        <word name='isampler1D'/>
+        <word name='isampler2D'/>
+        <word name='isampler3D'/>
+        <word name='isamplerCube'/>
+        <word name='isampler2DRect'/>
+        <word name='isampler1DArray'/>
+        <word name='isampler2DArray'/>
+        <word name='isamplerBuffer'/>
+        <word name='isampler2DMS'/>
+        <word name='isampler2DMSArray'/>
+        <word name='usampler1D'/>
+        <word name='usampler2D'/>
+        <word name='usampler3D'/>
+        <word name='usamplerCube'/>
+        <word name='usampler2DRect'/>
+        <word name='usampler1DArray'/>
+        <word name='usampler2DArray'/>
+        <word name='usamplerBuffer'/>
+        <word name='usampler2DMS'/>
+        <word name='usampler2DMSArray'/>
+      </keywords>
+    
+    </scheme>
+
+
+  </type>
+</hrc>

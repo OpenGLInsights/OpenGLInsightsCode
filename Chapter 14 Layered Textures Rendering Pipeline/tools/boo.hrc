@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!--
+    Boo programs
+    Dmitry Malyshev <kvarkus@gmail.com>
+-->
+<!DOCTYPE hrc PUBLIC "-//Cail Lomecb//DTD Colorer HRC take5//EN" "../hrc.dtd">
+<hrc version="take5" xmlns="http://colorer.sf.net/2003/hrc">
+  <type name="boo" access="public">
+
+    <import type="def"/>
+
+    <region name="LineComment" parent="def:LineComment"/>
+    <region name="Comment" parent="def:Comment"/>
+
+    <region name="Number" parent="def:Number"/>
+    <region name="Symbol" parent="def:Symbol"/>
+    <region name="StructureSymbol" parent="def:SymbolStrong"/>
+    <region name="PrefixSymbol" parent="def:SymbolStrong"/>
+
+    <scheme name="boo">
+      <inherit scheme="Preproc"/>
+      <inherit scheme="Comments"/>
+      <inherit scheme="BuiltIn"/>
+      <inherit scheme="Expression"/>
+      <inherit scheme="Code"/>
+
+      <keywords region="def:SymbolStrong">
+        <symb name=":"/>
+	<symb name="."/>
+	<symb name=","/>
+      </keywords>
+
+      <keywords region="def:Keyword">
+        <word name="namespace"/>
+        <word name="import"/>
+        <word name="struct"/>
+        <word name="class"/>
+        <word name="def"/>
+	<word name="constructor"/>
+	<word name="destructor"/>
+      </keywords>
+
+      <keywords region="def:Register">
+        <word name='public'/>
+        <word name='protected'/>
+        <word name='private'/>
+        <word name='internal'/>
+        <word name='static'/>
+        <word name='final'/>
+      </keywords>
+
+      <keywords region="def:Register">
+	<word name='virtual' />
+	<word name='abstract' />
+	<word name='override' />
+      </keywords>
+
+    </scheme>
+
+    
+    <scheme name="BuiltIn">
+      <!--regexp match="/(gl_\w+)/" region0="def:Character"/-->
+      <keywords region="def:Character">
+        <word name="gl_PerVertex"/>
+        <word name="gl_Position"/>
+	<word name="gl_PointSize"/>
+        <word name="gl_ClipDistance"/>
+        <word name="gl_Layer"/>
+        <word name="gl_PrimitiveIDIn"/>	
+        <word name="gl_PrimitiveID"/>
+        <word name="gl_FragCoord"/>
+        <word name="gl_FrontFacing"/>
+        <word name="gl_FragDepth"/>
+        <word name="gl_PointCoord"/>
+        <word name="gl_VertexID"/>
+        <word name="gl_InstanceID"/>
+      </keywords>
+    </scheme>
+
+    <scheme name="Comments">
+      <regexp match="/(\/\/|\#)(.*)$/"	region0="LineComment"/>
+      <block start="/\/\*/" end="/\*\//" scheme="Comment"
+        region="Comment" region00="def:PairStart" region10="def:PairEnd"/>
+    </scheme>
+
+   
+    <scheme name="Expression">
+      <inherit scheme="def:CHexNumber"/>
+      <inherit scheme="def:FloatNumber"/>
+      <inherit scheme="def:DecNumber"/>
+
+      <keywords region="def:Symbol">
+        <!--Control-->
+        <word name="sin"/>
+        <word name="cos"/>
+      </keywords>
+
+      <keywords region="def:Operator">
+        <symb name="="/>
+        <symb name="+"/>
+        <symb name="-"/>
+        <symb name="/"/>
+        <symb name="*"/>
+        <symb name="&amp;"/>
+        <symb name="&lt;"/>
+        <symb name="&gt;"/>
+        <symb name="^"/>
+        <symb name="|"/>
+        <symb name=":"/>
+        <symb name="!"/>
+        <symb name="~"/>
+        <symb name="%"/>
+        <symb name="?"/>
+        <symb name="("/>
+        <symb name=")"/>
+      </keywords>
+    </scheme>
+
+    
+    <scheme name="Code">
+      <inherit scheme="Comments"/>
+      <inherit scheme="Expression"/>
+      <inherit scheme="BuiltIn"/>
+      
+      <keywords region="def:Keyword">
+        <word name="break"/>
+        <word name="continue"/>
+        <word name="while"/>
+        <word name="do"/>
+        <word name="switch"/>
+        <word name="case"/>
+        <word name="default"/>
+        <word name="true"/>
+        <word name="false"/>
+        <word name="for"/>
+        <word name="if"/>
+        <word name="else"/>
+        <word name="return"/>
+      </keywords>
+  
+      <keywords region="def:TypeKeyword">
+        <!--Standard-->
+        <word name='void'/>
+        <word name='bool'/>
+	<word name='char'/>
+	<word name='byte'/>
+        <word name='int'/>
+        <word name='uint'/>
+        <word name='short'/>
+        <word name='ushort'/>
+        <word name='single'/>
+        <word name='double'/>
+        <word name='string'/>
+	<!--OpenTK-->
+	<word name='Vector2'/>
+	<word name='Vector3'/>
+	<word name='Vector4'/>
+	<word name='Quaternion'/>
+	<word name='Matrix3'/>
+	<word name='Matrix4'/>
+      </keywords>
+
+      <keywords region="def:InterfaceKeyword">
+        <word name='in'/>
+        <word name='as'/>
+        <word name='ref'/>
+      </keywords>
+    </scheme>
+
+  </type>
+</hrc>

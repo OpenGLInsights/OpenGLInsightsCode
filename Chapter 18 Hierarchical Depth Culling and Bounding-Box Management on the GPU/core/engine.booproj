@@ -1,0 +1,176 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+  <PropertyGroup>
+    <ProjectGuid>{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>kri</RootNamespace>
+    <AssemblyName>engine</AssemblyName>
+    <NoStdLib>False</NoStdLib>
+    <Ducky>False</Ducky>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\dmitrym\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <Strict>True</Strict>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <NoWarn>BCW0014</NoWarn>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>False</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <ducky>false</ducky>
+    <culture />
+    <genwarnings>false</genwarnings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <ducky>false</ducky>
+    <culture />
+    <genwarnings>false</genwarnings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.boo" />
+    <Compile Include="code\ani\Data.boo" />
+    <Compile Include="code\ani\Sim.boo" />
+    <Compile Include="code\ani\App.boo" />
+    <Compile Include="code\ani\Graph.boo" />
+    <Compile Include="code\ani\List.boo" />
+    <Compile Include="code\ani\Main.boo" />
+    <Compile Include="code\Ant.boo" />
+    <Compile Include="code\buf\Frame.boo" />
+    <Compile Include="code\buf\Main.boo" />
+    <Compile Include="code\buf\Render.boo" />
+    <Compile Include="code\buf\Holder.boo" />
+    <Compile Include="code\buf\Texture.boo" />
+    <Compile Include="code\Entity.boo" />
+    <Compile Include="code\Feedback.boo" />
+    <Compile Include="code\gen\Prime.boo" />
+    <Compile Include="code\gen\Land.boo" />
+    <Compile Include="code\gen\Main.boo" />
+    <Compile Include="code\gen\Noise.boo" />
+    <Compile Include="code\gen\Simple.boo" />
+    <Compile Include="code\gen\Texture.boo" />
+    <Compile Include="code\lib\Cap.boo" />
+    <Compile Include="code\lib\Journal.boo" />
+    <Compile Include="code\lib\Param.boo" />
+    <Compile Include="code\lib\Option.boo" />
+    <Compile Include="code\lib\par\Main.boo" />
+    <Compile Include="code\lib\par\Project.boo" />
+    <Compile Include="code\lib\par\Spatial.boo" />
+    <Compile Include="code\lib\Stat.boo" />
+    <Compile Include="code\load\Anim.boo" />
+    <Compile Include="code\load\image\Compress.boo" />
+    <Compile Include="code\load\image\Main.boo" />
+    <Compile Include="code\load\image\Targa.boo" />
+    <Compile Include="code\load\Native.boo" />
+    <Compile Include="code\load\Context.boo" />
+    <Compile Include="code\load\Material.boo" />
+    <Compile Include="code\load\Mesh.boo" />
+    <Compile Include="code\load\Object.boo" />
+    <Compile Include="code\load\Read.boo" />
+    <Compile Include="code\load\sound\Main.boo" />
+    <Compile Include="code\load\sound\Wave.boo" />
+    <Compile Include="code\Material.boo" />
+    <Compile Include="code\meta\App.boo" />
+    <Compile Include="code\meta\Main.boo" />
+    <Compile Include="code\meta\Unit.boo" />
+    <Compile Include="code\Object.boo" />
+    <Compile Include="code\part\Emitter.boo" />
+    <Compile Include="code\part\Main.boo" />
+    <Compile Include="code\part\Manager.boo" />
+    <Compile Include="code\rend\Chain.boo" />
+    <Compile Include="code\rend\Gauss.boo" />
+    <Compile Include="code\rend\Debug.boo" />
+    <Compile Include="code\rend\link\Buffer.boo" />
+    <Compile Include="code\rend\link\Main.boo" />
+    <Compile Include="code\rend\link\Help.boo" />
+    <Compile Include="code\rend\Main.boo" />
+    <Compile Include="code\rend\part\Main.boo" />
+    <Compile Include="code\rend\part\Tech.boo" />
+    <Compile Include="code\rend\part\Tool.boo" />
+    <Compile Include="code\rend\tech\Fork.boo" />
+    <Compile Include="code\rend\tech\General.boo" />
+    <Compile Include="code\rend\tech\Main.boo" />
+    <Compile Include="code\rend\tech\Sorted.boo" />
+    <Compile Include="code\rend\Tool.boo" />
+    <Compile Include="code\rend\Manager.boo" />
+    <Compile Include="code\data\Main.boo" />
+    <Compile Include="code\data\Switch.boo" />
+    <Compile Include="code\shade\Bundle.boo" />
+    <Compile Include="code\shade\Code.boo" />
+    <Compile Include="code\shade\Uniform.boo" />
+    <Compile Include="code\shade\Linker.boo" />
+    <Compile Include="code\shade\Mega.boo" />
+    <Compile Include="code\shade\par\Dict.boo" />
+    <Compile Include="code\shade\par\Main.boo" />
+    <Compile Include="code\shade\Object.boo" />
+    <Compile Include="code\shade\Program.boo" />
+    <Compile Include="code\sound\Cap.boo" />
+    <Compile Include="code\sound\Main.boo" />
+    <Compile Include="code\sound\Opera.boo" />
+    <Compile Include="code\sound\Source.boo" />
+    <Compile Include="code\Spatial.boo" />
+    <Compile Include="code\Tool.boo" />
+    <Compile Include="code\vb\Array.boo" />
+    <Compile Include="code\vb\Attrib.boo" />
+    <Compile Include="code\vb\Info.boo" />
+    <Compile Include="code\vb\Main.boo" />
+    <Compile Include="code\View.boo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\opentk\Source\OpenTK\OpenTK.csproj">
+      <Project>{A37A7E14-0000-0000-0000-000000000000}</Project>
+      <Name>OpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\lib\ext.booproj">
+      <Project>{ACE1CC26-970D-4F3B-9129-70911A339AC7}</Project>
+      <Name>ext</Name>
+    </ProjectReference>
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\lib\" />
+    <Folder Include="code\load\" />
+    <Folder Include="code\load\" />
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\buf" />
+    <Folder Include="code\rend\" />
+    <Folder Include="code\rend\" />
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\rend\" />
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\" />
+    <Folder Include="code\rend\" />
+    <Folder Include="code\rend\link" />
+    <Folder Include="code\shade\par" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+  </ItemGroup>
+  <Import Project="$(BooBinPath)\Boo.Microsoft.Build.targets" />
+</Project>

@@ -1,0 +1,156 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>Library</OutputType>
+    <RootNamespace>support</RootNamespace>
+    <AssemblyName>support</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\dmitrym\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <NoStdLib>False</NoStdLib>
+    <Ducky>False</Ducky>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <Strict>True</Strict>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugType>full</DebugType>
+    <ducky>false</ducky>
+    <culture />
+    <genwarnings>false</genwarnings>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>none</DebugType>
+    <ducky>false</ducky>
+    <culture />
+    <genwarnings>false</genwarnings>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.boo" />
+    <Compile Include="code\corp\Emitter.boo" />
+    <Compile Include="code\corp\Manager.boo" />
+    <Compile Include="code\corp\rend\Draw.boo" />
+    <Compile Include="code\corp\rend\Update.boo" />
+    <Compile Include="code\cull\Soft.boo" />
+    <Compile Include="code\defer\Envir.boo" />
+    <Compile Include="code\node\Main.boo" />
+    <Compile Include="code\skin\Debug.boo" />
+    <Compile Include="code\stereo\Anaglyph.boo" />
+    <Compile Include="code\asm\Context.boo" />
+    <Compile Include="code\asm\Mesh.boo" />
+    <Compile Include="code\asm\Scene.boo" />
+    <Compile Include="code\asm\Texture.boo" />
+    <Compile Include="code\asm\View.boo" />
+    <Compile Include="code\bake\Depth.boo" />
+    <Compile Include="code\bake\Edge.boo" />
+    <Compile Include="code\bake\Surface.boo" />
+    <Compile Include="code\corp\beh\Main.boo" />
+    <Compile Include="code\corp\beh\Small.boo" />
+    <Compile Include="code\corp\Child.boo" />
+    <Compile Include="code\corp\Inst.boo" />
+    <Compile Include="code\corp\Load.boo" />
+    <Compile Include="code\cull\box\Apply.boo" />
+    <Compile Include="code\cull\box\Fill.boo" />
+    <Compile Include="code\cull\box\Main.boo" />
+    <Compile Include="code\cull\HierZ.boo" />
+    <Compile Include="code\cull\Main.boo" />
+    <Compile Include="code\defer\Apply.boo" />
+    <Compile Include="code\defer\Fill.boo" />
+    <Compile Include="code\defer\Group.boo" />
+    <Compile Include="code\defer\Main.boo" />
+    <Compile Include="code\defer\Particle.boo" />
+    <Compile Include="code\hair\Bake.boo" />
+    <Compile Include="code\hair\Beh.boo" />
+    <Compile Include="code\hair\Draw.boo" />
+    <Compile Include="code\hair\Main.boo" />
+    <Compile Include="code\hdr\Main.boo" />
+    <Compile Include="code\asm\Draw.boo" />
+    <Compile Include="code\layer\Fill.boo" />
+    <Compile Include="code\layer\Main.boo" />
+    <Compile Include="code\light\Context.boo" />
+    <Compile Include="code\light\Defer.boo" />
+    <Compile Include="code\light\Group.boo" />
+    <Compile Include="code\light\Kbuf.boo" />
+    <Compile Include="code\light\Normal.boo" />
+    <Compile Include="code\light\Omni.boo" />
+    <Compile Include="code\light\Spot.boo" />
+    <Compile Include="code\mirror\Main.boo" />
+    <Compile Include="code\morph\App.boo" />
+    <Compile Include="code\morph\Main.boo" />
+    <Compile Include="code\motion\Main.boo" />
+    <Compile Include="code\phys\Main.boo" />
+    <Compile Include="code\pick\Main.boo" />
+    <Compile Include="code\reflect\App.boo" />
+    <Compile Include="code\reflect\Main.boo" />
+    <Compile Include="code\skin\App.boo" />
+    <Compile Include="code\skin\Main.boo" />
+    <Compile Include="code\skin\Uni.boo" />
+    <Compile Include="code\stereo\Dual.boo" />
+    <Compile Include="code\text\Scaler.boo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\opentk\Source\OpenTK\OpenTK.csproj">
+      <Project>{A37A7E14-0000-0000-0000-000000000000}</Project>
+      <Name>OpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\core\engine.booproj">
+      <Project>{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}</Project>
+      <Name>engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\lib\ext.booproj">
+      <Project>{ACE1CC26-970D-4F3B-9129-70911A339AC7}</Project>
+      <Name>ext</Name>
+    </ProjectReference>
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Drawing" />
+    <Folder Include="code" />
+    <Folder Include="code\bake" />
+    <Folder Include="code\corp" />
+    <Folder Include="code\corp\beh" />
+    <Folder Include="code\corp\rend" />
+    <Folder Include="code\cull" />
+    <Folder Include="code\cull\box" />
+    <Folder Include="code\defer" />
+    <Folder Include="code\hair" />
+    <Folder Include="code\hdr" />
+    <Folder Include="code\layer" />
+    <Folder Include="code\light" />
+    <Folder Include="code\mirror" />
+    <Folder Include="code\morph" />
+    <Folder Include="code\motion" />
+    <Folder Include="code\asm" />
+    <Folder Include="code\node" />
+    <Folder Include="code\stereo" />
+    <Folder Include="code\text" />
+    <Folder Include="code\phys" />
+    <Folder Include="code\pick" />
+    <Folder Include="code\reflect" />
+    <Folder Include="code\skin" />
+  </ItemGroup>
+  <Import Project="$(BooBinPath)\Boo.Microsoft.Build.targets" />
+</Project>

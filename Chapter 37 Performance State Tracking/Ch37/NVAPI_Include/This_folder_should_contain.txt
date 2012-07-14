@@ -1,0 +1,13 @@
+---------------------------------------------------
+This folder should contain the following files:
+
+nvapi.h
+nvapi.lib
+NvApiDriverSettings.c
+NvApiDriverSettings.h
+
+---------------------------------------------------
+The files can be downloaded from the following URL:
+
+http://developer.nvidia.com/nvapi
+---------------------------------------------------

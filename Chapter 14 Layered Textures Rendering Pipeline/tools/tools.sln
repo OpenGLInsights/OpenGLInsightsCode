@@ -1,0 +1,67 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+# SharpDevelop 3.2.1.6466
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "viewer", "viewer\code\viewer.booproj", "{C1D20577-F85B-4E98-8285-9150089773FF}"
+EndProject
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "linker", "linker\code\linker.booproj", "{65987582-ECE9-4C83-AC5E-A3092C8FB354}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "system", "system", "{177CE39D-EFE0-4C41-BF44-B13B4CB2ABCC}"
+	ProjectSection(SolutionItems) = postProject
+	EndProjectSection
+EndProject
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "engine", "..\core\engine.booproj", "{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}"
+EndProject
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "ext", "..\lib\ext.booproj", "{ACE1CC26-970D-4F3B-9129-70911A339AC7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GLWidget", "..\..\GLWidget\GLWidget\GLWidget.csproj", "{34627299-AB51-4C99-B5DA-C03EB751B387}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenTK", "..\..\opentk\Source\OpenTK\OpenTK.csproj", "{A37A7E14-0000-0000-0000-000000000000}"
+EndProject
+Project("{A33008B1-5DAC-44D5-9060-242E3B6E38F2}") = "support", "..\support\support.booproj", "{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+		Debug|x86 = Debug|x86
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{C1D20577-F85B-4E98-8285-9150089773FF}.Debug|x86.Build.0 = Debug|x86
+		{C1D20577-F85B-4E98-8285-9150089773FF}.Debug|x86.ActiveCfg = Debug|x86
+		{C1D20577-F85B-4E98-8285-9150089773FF}.Release|x86.Build.0 = Release|x86
+		{C1D20577-F85B-4E98-8285-9150089773FF}.Release|x86.ActiveCfg = Release|x86
+		{A37A7E14-0000-0000-0000-000000000000}.Debug|x86.Build.0 = Debug|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Release|x86.Build.0 = Release|Any CPU
+		{A37A7E14-0000-0000-0000-000000000000}.Release|x86.ActiveCfg = Release|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Debug|x86.Build.0 = Debug|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Release|x86.Build.0 = Release|Any CPU
+		{34627299-AB51-4C99-B5DA-C03EB751B387}.Release|x86.ActiveCfg = Release|Any CPU
+		{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC}.Debug|x86.Build.0 = Debug|x86
+		{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC}.Debug|x86.ActiveCfg = Debug|x86
+		{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC}.Release|x86.Build.0 = Release|x86
+		{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC}.Release|x86.ActiveCfg = Release|x86
+		{ACE1CC26-970D-4F3B-9129-70911A339AC7}.Debug|x86.Build.0 = Debug|Any CPU
+		{ACE1CC26-970D-4F3B-9129-70911A339AC7}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{ACE1CC26-970D-4F3B-9129-70911A339AC7}.Release|x86.Build.0 = Release|Any CPU
+		{ACE1CC26-970D-4F3B-9129-70911A339AC7}.Release|x86.ActiveCfg = Release|Any CPU
+		{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}.Debug|x86.Build.0 = Debug|Any CPU
+		{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}.Release|x86.Build.0 = Release|Any CPU
+		{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}.Release|x86.ActiveCfg = Release|Any CPU
+		{65987582-ECE9-4C83-AC5E-A3092C8FB354}.Debug|x86.Build.0 = Debug|x86
+		{65987582-ECE9-4C83-AC5E-A3092C8FB354}.Debug|x86.ActiveCfg = Debug|x86
+		{65987582-ECE9-4C83-AC5E-A3092C8FB354}.Release|x86.Build.0 = Release|x86
+		{65987582-ECE9-4C83-AC5E-A3092C8FB354}.Release|x86.ActiveCfg = Release|x86
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC} = {177CE39D-EFE0-4C41-BF44-B13B4CB2ABCC}
+		{A37A7E14-0000-0000-0000-000000000000} = {177CE39D-EFE0-4C41-BF44-B13B4CB2ABCC}
+		{34627299-AB51-4C99-B5DA-C03EB751B387} = {177CE39D-EFE0-4C41-BF44-B13B4CB2ABCC}
+		{ACE1CC26-970D-4F3B-9129-70911A339AC7} = {177CE39D-EFE0-4C41-BF44-B13B4CB2ABCC}
+		{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627} = {177CE39D-EFE0-4C41-BF44-B13B4CB2ABCC}
+	EndGlobalSection
+EndGlobal

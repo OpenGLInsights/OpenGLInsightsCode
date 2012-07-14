@@ -1,0 +1,53 @@
+#version 330 core
+
+#define POSITION		0
+#define OTHERVERT		1
+#define OFFSETDIR_UV	2
+#define LINECOLOR		3
+
+layout(location = POSITION)     in vec3 Position;
+layout(location = OTHERVERT)    in vec3 PositionOther;
+layout(location = OFFSETDIR_UV) in vec4 OffsetUV;
+layout(location = LINECOLOR)	in vec3 lineColor;
+
+out block
+{
+	vec2 Texcoord;
+	flat vec3 lineColor3;
+} Out;
+
+uniform mat4 MVP;
+uniform float radius;
+uniform float invScrRatio;
+
+void main()
+{
+	Out.Texcoord = OffsetUV.zw;
+	Out.lineColor3 = lineColor;
+
+	vec3 _position = Position;
+	vec3 _positionOther = PositionOther;
+	if(gl_VertexID < 4)
+	{
+		_position = PositionOther;
+		_positionOther = Position;
+	}
+
+	//compute vertices position in clip space
+	vec4 vMVP     = MVP * vec4(_position,1.0);
+	vec4 otherMVP = MVP * vec4(_positionOther,1.0);
+
+	//  line direction in screen space (perspective division required)
+	vec2 lineDirProj = radius * normalize(vMVP.xy/vMVP.ww - otherMVP.xy/otherMVP.ww);
+
+	// small trick to avoid inversed line condition when points are not on the same side of Z plane
+	if( sign(otherMVP.w) != sign(vMVP.w) )
+		lineDirProj = -lineDirProj;
+
+	// offset position in screen space along line direction and orthogonal direction
+	vMVP.xy += lineDirProj.xy					* OffsetUV.xx * vec2(1.0,invScrRatio);
+	vMVP.xy += lineDirProj.yx*vec2(1.0,-1.0)	* OffsetUV.yy * vec2(1.0,invScrRatio);
+
+	gl_Position = vMVP;
+}
+

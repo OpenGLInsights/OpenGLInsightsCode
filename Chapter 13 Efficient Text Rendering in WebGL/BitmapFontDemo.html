@@ -1,0 +1,308 @@
+ <!--***********************************************************************
+Bitmap Font Rendering Demo - OpenGLInsights
+
+This file contains code which is relevant for font rendering.
+The WebGL basics are contained in GLUtils.js
+**************************************************************************-->
+
+<html> 
+ 
+<head> 
+<title>Bitmap Font Rendering Demo</title> 
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+ 
+<script type="text/javascript" src="dependencies/sylvester.js"></script> 
+<script type="text/javascript" src="dependencies/GlUtils.js"></script> 
+<script type="text/javascript" src="bmfont/bmFont.js"></script>   
+<script type="text/javascript" src="dependencies/dojo.js"></script>  
+
+ 
+ <!--***********************************************************************
+ Shader Implementation
+ **************************************************************************-->
+  
+<script id="shader-fs" type="x-shader/x-fragment"> 
+  #ifdef GL_ES
+  precision highp float;
+  #endif
+ 
+  varying vec2 vTextureCoord;
+ 
+  uniform sampler2D uSampler;
+ 
+  void main(void) {
+    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+  }
+</script> 
+ 
+<script id="shader-vs" type="x-shader/x-vertex"> 
+  attribute vec3 aVertexPosition;
+  attribute vec2 aTextureCoord;
+ 
+  uniform mat4 uMVMatrix;
+  uniform mat4 uPMatrix;
+ 
+  varying vec2 vTextureCoord;
+ 
+ 
+  void main(void) {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0); 
+    vTextureCoord = aTextureCoord;
+  }
+</script> 
+ 
+ 
+<script type="text/javascript"> 
+ 
+/**********************************************************************************
+Load Bitmap Font
+*********************************************************************************/ 
+  var bmFontDescriptor; 
+  
+  function parseBitmapFont() {
+		bmFontDescriptor = new BitmapFontDescriptor();
+		bmFontDescriptor.instantiate(); 
+  } 
+  
+/**********************************************************************************
+Initialize Buffers
+
+The character tiles are created here
+*********************************************************************************/ 
+  
+  var fontVertexPositionBuffer;
+  var fontVertexIndexBuffer;
+  
+  var fontVertexIndices = new Array();
+  var vertices = new Array();
+  
+  function initBuffers() {
+	
+	// initialize string and select amount of strings
+	var renderString = "This is a Bitmap Font Rendering Demo";
+	var stringAmount = 10;   
+	var quadAmount = renderString.length;   
+	
+	// initialize counter variables
+	var vertices_i = 0;
+	var textureCoords_i = 0;
+	var indices_i = 0;
+	
+	// reset the textureCoordArray
+
+	// set factor which bitmap font tiles shall be scaled with
+	var fontSizeFactor = 0.06; 	 
+
+	// set start position for first string
+	var xOffset = - 50;
+	var yOffset = 40;
+	
+	// outer loop: is executed for every string
+	for (i=0; i < stringAmount; i++) { 
+		// set yOffset for new line
+		yOffset = yOffset - (bmFontDescriptor.lineHeight * fontSizeFactor);
+		// reset xOffset for new line
+		xOffset = -50;
+		
+		// inner loop: is executed for every character
+		for (n=0; n < quadAmount; n++) {
+			letterDescriptor = bmFontDescriptor.getLetter(renderString[n]);
+			var letterxOffset = letterDescriptor.xoffset * fontSizeFactor;
+			var letteryOffset = - (letterDescriptor.yoffset * fontSizeFactor);
+			var letterxAdvance = letterDescriptor.xadvance * fontSizeFactor;
+
+			// append the textureCoords for the current letter
+			textureCoords = (letterDescriptor.textureBuffer);  
+			
+			// initialize P1
+			vertices[vertices_i] = 0 + xOffset + letterxOffset;
+			vertices[vertices_i+1] = - (letterDescriptor.height * fontSizeFactor) + yOffset + letteryOffset; 
+			vertices[vertices_i+2] =  1.0; 
+			vertices[vertices_i+3] = textureCoords[0];
+			vertices[vertices_i+4] = textureCoords[1];
+			// initialize P2		
+			vertices[vertices_i+5] =  (letterDescriptor.width * fontSizeFactor) + xOffset + letterxOffset;
+			vertices[vertices_i+6] = - (letterDescriptor.height * fontSizeFactor) + yOffset  + letteryOffset;
+			vertices[vertices_i+7] =  1.0;
+			vertices[vertices_i+8] = textureCoords[2];
+			vertices[vertices_i+9] = textureCoords[3];
+			// initialize P3		
+			vertices[vertices_i+10] = (letterDescriptor.width * fontSizeFactor) + xOffset + letterxOffset;
+			vertices[vertices_i+11] =  0 + yOffset  + letteryOffset;
+			vertices[vertices_i+12] =  1.0;
+			vertices[vertices_i+13] =  textureCoords[4];
+			vertices[vertices_i+14] =  textureCoords[5];
+			// initialize P4		
+			vertices[vertices_i+15] =  0 + xOffset + letterxOffset;
+			vertices[vertices_i+16] = 0 + yOffset  + letteryOffset;
+			vertices[vertices_i+17] =  1.0;
+			vertices[vertices_i+18] =  textureCoords[6];
+			vertices[vertices_i+19] =  textureCoords[7];
+			
+			xOffset += letterxAdvance; 
+			vertices_i += 20; 
+		  
+
+			// create vertex indices for the current letter
+			
+			var indices_offset = (i*renderString.length + n)*4; 
+			
+			fontVertexIndices[indices_i]   = 0 + indices_offset;
+			fontVertexIndices[indices_i+1] = 1 + indices_offset;
+			fontVertexIndices[indices_i+2] = 2 + indices_offset;
+			fontVertexIndices[indices_i+3] = 0 + indices_offset;
+			fontVertexIndices[indices_i+4] = 2 + indices_offset;
+			fontVertexIndices[indices_i+5] = 3 + indices_offset; 
+			indices_i+=6;
+		}
+	
+	}
+	
+	// fill buffers with generated data
+			
+    gl.bindBuffer(gl.ARRAY_BUFFER, fontVertexPositionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    fontVertexPositionBuffer.itemSize = 5; 
+    fontVertexPositionBuffer.numItems = quadAmount * 4 * stringAmount; 
+	
+	gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, fontVertexIndexBuffer);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(fontVertexIndices), gl.STATIC_DRAW);
+    fontVertexIndexBuffer.itemSize = 1;
+    fontVertexIndexBuffer.numItems = quadAmount * 6 * stringAmount; 
+  }
+ 
+
+/**********************************************************************************
+Texture Handling
+*********************************************************************************/
+ 
+  var fontTexture;
+
+  function initTexture() {
+	fontTexture = gl.createTexture();
+	fontTexture.image = new Image();
+	fontTexture.image.onload = function() {
+		// bind texture as currently acitve texture
+		gl.bindTexture(gl.TEXTURE_2D, fontTexture);
+				
+		gl.texImage2D(gl.TEXTURE_2D, 0,gl.LUMINANCE_ALPHA, gl.LUMINANCE_ALPHA, gl.UNSIGNED_BYTE,fontTexture.image);
+		
+		// we use that filtering combination to activate Bilinear filtering and 
+		// trilinear filtering for MipMaps which smoothes the fonts appereance nicely
+		// define how to shrink a texture
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); 
+		// define how to expand a texture
+		gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+		
+		// generate the MipMap required for the filter
+		gl.generateMipmap(gl.TEXTURE_2D);
+		
+		// unbind texture after all operations are made
+		gl.bindTexture(gl.TEXTURE_2D, null);
+	}
+	 
+	fontTexture.image.src = "bmfont/arialLargeTransparent.png";   
+}
+
+
+/**********************************************************************************
+Draw Scene
+*********************************************************************************/ 
+ // initial frame count values
+ var fpsUpdateTime = 500;
+ var fpsFramesTime = 0;
+ var fpsFramesCount = 0;
+ var last_frame = 0;  
+  
+  function drawScene() {
+	
+	// Calculate CPU-Frametime
+    if(fpsFramesTime > fpsUpdateTime) {
+    		var div = document.getElementById("fps");
+    		var fps = Math.round(1000.0 / (fpsFramesTime / fpsFramesCount) * 100)/100 + " rendering loop calls per second";
+    		if(div != null) div.innerHTML = fps;
+    		fpsFramesTime = 0; 
+    		fpsFramesCount = 0;
+    } else {
+    		fpsFramesTime += new Date().getTime() - last_frame;
+    		fpsFramesCount++;
+    } 
+    last_frame = new Date().getTime();
+
+    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 500.0);
+    loadIdentity();
+ 
+	// refresh translation and rotation
+    mvTranslate([0.0, 0.0, z]); 
+    mvRotate(xRot, [1, 0, 0]);
+    mvRotate(yRot, [0, 1, 0]);
+ 
+    gl.bindBuffer(gl.ARRAY_BUFFER, fontVertexPositionBuffer);
+	// we have 3 vertex positions 
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 20, 0);
+	// and 2 texture coords
+    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, 2, gl.FLOAT, false, 20, 12);
+ 
+	// bind texture
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, fontTexture);
+    gl.uniform1i(shaderProgram.samplerUniform, 0); 
+ 
+    setMatrixUniforms();
+    gl.drawElements(gl.TRIANGLES, fontVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);  
+  }
+  
+  // tick is called every frame
+  function tick() {
+    handleKeys();
+    drawScene();
+    animate();
+  }
+
+  
+  function webGLStart() {
+	// select canvas element and initialize gl-object
+	var canvas = document.getElementById("canvas");
+	initGL(canvas);
+
+	// initialize the necessary WebGL buffers
+	fontVertexIndexBuffer = gl.createBuffer();
+	fontVertexPositionBuffer = gl.createBuffer(); 
+
+	parseBitmapFont();
+	initTexture(); 
+	initShaders();
+	initBuffers();
+
+	gl.clearColor(0.0, 0.0, 0.0, 1.0);
+
+	gl.clearDepth(1.0);
+
+	gl.enable(gl.DEPTH_TEST);
+	gl.depthFunc(gl.LEQUAL);
+
+	gl.blendColor(1.0, 1.0, 1.0, 0.0);  
+	gl.blendFunc(gl.SRC_ALPHA,gl.ONE_MINUS_SRC_ALPHA);
+	gl.enable(gl.BLEND); 
+
+	document.onkeydown = handleKeyDown;
+	document.onkeyup = handleKeyUp;
+
+	setInterval(tick, 1);
+  }
+
+</script> 
+</head> 
+ 
+<body onload="webGLStart();"> 
+ <h1>Bitmap Font Rendering Demo</h1>
+  <canvas id="canvas" style="border: none;" width="900" height="600"></canvas> 
+  <br><div id="fps"></div>
+
+ 
+</body> 
+ 
+</html>

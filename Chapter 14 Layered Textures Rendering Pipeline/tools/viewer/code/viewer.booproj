@@ -1,0 +1,78 @@
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{C1D20577-F85B-4E98-8285-9150089773FF}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>viewer</RootNamespace>
+    <AssemblyName>viewer</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <SourceAnalysisOverrideSettingsFile>C:\Documents and Settings\dmitrym\Application Data\ICSharpCode/SharpDevelop3.0\Settings.SourceAnalysis</SourceAnalysisOverrideSettingsFile>
+    <NoStdLib>False</NoStdLib>
+    <Ducky>False</Ducky>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+    <Strict>True</Strict>
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <StartWorkingDirectory>..\</StartWorkingDirectory>
+    <NoWin32Manifest>True</NoWin32Manifest>
+    <BaseIntermediateOutputPath>..\obj\</BaseIntermediateOutputPath>
+    <StartArguments>-draw -pipe=HierZ -play -scene=../../export/scenes/build/unfold.scene</StartArguments>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'x86' ">
+    <PlatformTarget>x86</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>..\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>Full</DebugType>
+    <Optimize>False</Optimize>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <StartAction>Project</StartAction>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>..\</OutputPath>
+    <DebugSymbols>false</DebugSymbols>
+    <DebugType>None</DebugType>
+    <Optimize>True</Optimize>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.boo" />
+    <Compile Include="Exception.boo" />
+    <Compile Include="Logic.boo" />
+    <Compile Include="Main.boo" />
+    <Compile Include="Render.boo" />
+    <Compile Include="Tool.boo" />
+    <Compile Include="Window.boo" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\GLWidget\GLWidget\GLWidget.csproj">
+      <Project>{34627299-AB51-4C99-B5DA-C03EB751B387}</Project>
+      <Name>GLWidget</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\opentk\Source\OpenTK\OpenTK.csproj">
+      <Project>{A37A7E14-0000-0000-0000-000000000000}</Project>
+      <Name>OpenTK</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\core\engine.booproj">
+      <Project>{3AF8D8CA-1C4C-4229-BDDA-BB7C2C46D627}</Project>
+      <Name>engine</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\support\support.booproj">
+      <Project>{789A5076-DF09-4C9F-B4A6-2F3CB9872BEC}</Project>
+      <Name>support</Name>
+    </ProjectReference>
+    <Reference Include="glade-sharp">
+      <HintPath>..\..\..\..\..\..\Program Files\Mono-2.10.1\lib\mono\gtk-sharp-2.0\glade-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="glib-sharp">
+      <HintPath>..\..\..\..\..\..\Program Files\Mono-2.10.1\lib\mono\gtk-sharp-2.0\glib-sharp.dll</HintPath>
+    </Reference>
+    <Reference Include="gtk-sharp">
+      <HintPath>..\..\..\..\..\..\Program Files\Mono-2.10.1\lib\mono\gtk-sharp-2.0\gtk-sharp.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <Import Project="$(BooBinPath)\Boo.Microsoft.Build.targets" />
+</Project>

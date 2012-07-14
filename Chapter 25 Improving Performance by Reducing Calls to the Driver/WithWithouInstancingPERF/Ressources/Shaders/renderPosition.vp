@@ -1,0 +1,19 @@
+#version 330 core
+
+#define VERTEX			0
+
+layout(location = VERTEX)	    in vec3 Vertex;
+
+uniform mat4 MVP;
+uniform vec3 Position;
+//uniform vec3 Color;
+//uniform vec3 MatParam;
+
+void main()
+{
+	//gl_Position = MVP * vec4(Vertex,1.0);
+	gl_Position = MVP * vec4(Vertex+Position,1.0);
+	//gl_Position = MVP * vec4(Vertex+Position+0.01*Color,1.0);
+	//gl_Position = MVP * vec4(Vertex+Position+0.01*Color+0.01*MatParam,1.0);
+}
+

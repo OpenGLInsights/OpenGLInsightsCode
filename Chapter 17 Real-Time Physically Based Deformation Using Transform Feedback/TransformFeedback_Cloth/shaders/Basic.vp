@@ -1,0 +1,31 @@
+/*
+Demo code accompanying the Chapter: "Realtime Deformation using Transform Feedback" by
+Muhammad Mobeen Movania and Lin Feng. This is the shader code for simple vertex processing. 
+
+Author: Muhammad Mobeen Movania
+Last Modified: 9 September 2011.
+*/
+#version 330
+precision highp float;
+
+#extension EXT_gpu_shader4 : require
+in vec4 position_mass; 
+uniform mat4 MV;
+uniform mat4 MVP;
+uniform float pointSize;
+uniform int selected_index;
+
+uniform in vec4 vColor;
+smooth out vec4 oColor;
+void main(void) 
+{  
+	
+	vec4 vert = vec4(position_mass.xyz,1);
+	vec3 pos_eye = (MV * vert).xyz;
+    gl_PointSize = max(1.0, pointSize / (1.0 - pos_eye.z));
+	gl_Position = MVP*vec4(position_mass.xyz, 1.0);		
+	if(selected_index == gl_VertexID)
+	   oColor = 1-vColor;
+	else
+	   oColor = vColor;
+}

@@ -1,0 +1,245 @@
+ <!--***********************************************************************
+Canvas Font Rendering Demo - OpenGLInsights
+
+This file contains code which is relevant for font rendering.
+The WebGL basics are contained in GLUtils.js
+**************************************************************************-->
+
+<html> 
+ 
+<head> 
+<title>Canvas Font Rendering Demo</title> 
+<meta http-equiv="content-type" content="text/html; charset=ISO-8859-1"> 
+ 
+<script type="text/javascript" src="dependencies/sylvester.js"></script> 
+<script type="text/javascript" src="dependencies/GlUtils.js"></script> 
+<script type="text/javascript" src="bmfont/bmFont.js"></script>   
+<script type="text/javascript" src="dependencies/dojo.js"></script>  
+
+ 
+ <!--***********************************************************************
+ Shader Implementation
+ **************************************************************************-->
+  
+<script id="shader-fs" type="x-shader/x-fragment"> 
+  #ifdef GL_ES
+  precision highp float;
+  #endif
+ 
+  varying vec2 vTextureCoord;
+ 
+  uniform sampler2D uSampler;
+ 
+  void main(void) {
+    gl_FragColor = texture2D(uSampler, vec2(vTextureCoord.s, vTextureCoord.t));
+  }
+</script> 
+ 
+<script id="shader-vs" type="x-shader/x-vertex"> 
+  attribute vec3 aVertexPosition;
+  attribute vec2 aTextureCoord;
+ 
+  uniform mat4 uMVMatrix;
+  uniform mat4 uPMatrix;
+ 
+  varying vec2 vTextureCoord;
+ 
+ 
+  void main(void) {
+    gl_Position = uPMatrix * uMVMatrix * vec4(aVertexPosition, 1.0); 
+    vTextureCoord = aTextureCoord;
+  }
+</script> 
+ 
+ 
+<script type="text/javascript"> 
+  
+ 
+/**********************************************************************************
+Texture Handling
+
+The character tiles are created here
+*********************************************************************************/ 
+  var dynamicTexture;
+  var dynamicImage;
+
+  function initTexture() {
+    if (!dynamicTexture) dynamicTexture = gl.createTexture(); 
+    dynamicImage = document.getElementById('text');
+    var ctx = dynamicImage.getContext('2d');
+    var renderString = "This is a Canvas Font Rendering Demo";
+	
+    var leftOffset = ctx.canvas.width / 2;
+    var topOffset = 21;    
+	ctx.fillStyle = 'black';
+    ctx.fillRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+    ctx.fillStyle = 'white';
+    ctx.lineWidth = 5;
+    ctx.strokeStyle = 'black';
+    ctx.font = "56px Arial"; 
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (i=0; i < 10; i++) {
+		ctx.fillText(renderString, leftOffset, topOffset);
+		topOffset += 60
+	} 
+    ctx.restore();
+    handleLoadedTexture(dynamicImage, dynamicTexture);
+  }
+  
+    function handleLoadedTexture(image, texture) {
+	// bind texture as currently acitve texture
+	gl.bindTexture(gl.TEXTURE_2D, texture);
+
+	// flip the textures y-coordinates
+	gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+
+	gl.texImage2D(gl.TEXTURE_2D, 0,gl.LUMINANCE_ALPHA, gl.LUMINANCE_ALPHA, gl.UNSIGNED_BYTE,image); 
+
+	// we use that filtering combination to activate Bilinear filtering and 
+	// trilinear filtering for MipMaps which smoothes the fonts appereance nicely
+	// define how to shrink a texture
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR_MIPMAP_LINEAR); 
+	// define how to expand a texture
+	gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+
+	// generate the MipMap required for the filter
+	gl.generateMipmap(gl.TEXTURE_2D);
+
+	// unbind texture after all operations are made
+	gl.bindTexture(gl.TEXTURE_2D, null);
+  }
+
+/**********************************************************************************
+Initialize Buffers
+*********************************************************************************/ 
+
+  var tileVertexPositionBuffer;
+  var tileVertexIndexBuffer;
+
+  function initBuffers() {
+    gl.bindBuffer(gl.ARRAY_BUFFER, tileVertexPositionBuffer);
+    var vertices = [
+      -50, -70,  1.0,  0.0,  0.0,
+       50, -70,  1.0,  1.0,  0.0,
+       50,  30,  1.0,  1.0,  1.0,
+      -50,  30,  1.0,  0.0,  1.0,
+    ];
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vertices), gl.STATIC_DRAW);
+    tileVertexPositionBuffer.itemSize = 5;
+    tileVertexPositionBuffer.numItems = 4;
+ 
+    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, tileVertexIndexBuffer);
+    var tileVertexIndices = [
+      0, 1, 2,      0, 2, 3,
+    ]
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(tileVertexIndices), gl.STATIC_DRAW);
+    tileVertexIndexBuffer.itemSize = 1;
+    tileVertexIndexBuffer.numItems = 6;
+  }
+ 
+
+/**********************************************************************************
+Draw Scene
+*********************************************************************************/ 
+ // initial frame count values
+ var fpsUpdateTime = 500;
+ var fpsFramesTime = 0;
+ var fpsFramesCount = 0;
+ var last_frame = 0;  
+ 
+  function drawScene() {
+  
+	// Calculate CPU-Frametime
+    if(fpsFramesTime > fpsUpdateTime) {
+    		var div = document.getElementById("fps");
+    		var fps = Math.round(1000.0 / (fpsFramesTime / fpsFramesCount) * 100)/100 + " fps";
+    		if(div != null) div.innerHTML = fps;
+    		fpsFramesTime = 0; 
+    		fpsFramesCount = 0;
+    } else {
+    		fpsFramesTime += new Date().getTime() - last_frame;
+    		fpsFramesCount++;
+    } 
+	
+    last_frame = new Date().getTime();
+
+    gl.viewport(0, 0, gl.viewportWidth, gl.viewportHeight);
+    gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+
+    perspective(45, gl.viewportWidth / gl.viewportHeight, 0.1, 500.0);
+    loadIdentity();
+ 
+	// refresh translation and rotation
+    mvTranslate([0.0, 0.0, z]); 
+    mvRotate(xRot, [1, 0, 0]);
+    mvRotate(yRot, [0, 1, 0]);
+ 
+    gl.bindBuffer(gl.ARRAY_BUFFER, tileVertexPositionBuffer);
+	// we have 3 vertex positions 
+    gl.vertexAttribPointer(shaderProgram.vertexPositionAttribute, 3, gl.FLOAT, false, 20, 0);
+	// and 2 texture coords
+    gl.vertexAttribPointer(shaderProgram.textureCoordAttribute, 2, gl.FLOAT, false, 20, 12);
+ 
+	// bind texture
+    gl.activeTexture(gl.TEXTURE0);
+    gl.bindTexture(gl.TEXTURE_2D, dynamicTexture);
+    gl.uniform1i(shaderProgram.samplerUniform, 0); 
+ 
+    setMatrixUniforms();
+    gl.drawElements(gl.TRIANGLES, tileVertexIndexBuffer.numItems, gl.UNSIGNED_SHORT, 0);  
+  }
+  
+  function tick() {
+    handleKeys();
+    drawScene();
+    animate();
+  }
+ 
+ 
+ 
+  function webGLStart() {
+  	// select canvas element and initialize gl-object
+    var canvas = document.getElementById("canvas");
+    initGL(canvas);
+
+	// initialize the necessary WebGL buffers 
+	tileVertexPositionBuffer = gl.createBuffer();
+	tileVertexIndexBuffer = gl.createBuffer(); 
+    
+    initShaders();
+    initBuffers();
+	initTexture(); 
+
+    gl.clearColor(0.0, 0.0, 0.0, 1.0);
+    gl.clearDepth(1.0);
+    gl.enable(gl.DEPTH_TEST);
+    gl.depthFunc(gl.LEQUAL);
+ 
+    document.onkeydown = handleKeyDown;
+    document.onkeyup = handleKeyUp;
+ 
+    setInterval(tick, 1);
+  } 
+ 
+ 
+ 
+</script> 
+ 
+ 
+</head> 
+ 
+ 
+<body onload="webGLStart();"> 
+ <h1>Canvas Font Rendering Demo</h1>
+
+  <h2>3D Canvas</h2>
+  <canvas id="canvas" style="border: none;" width="900" height="600"></canvas> 
+  <h2>2D Canvas</h2>
+  <canvas id="text" width="1024" height="1024"></canvas>   
+  <br><div id="fps" ></div>
+
+ 
+</body> 
+ 
+</html>
