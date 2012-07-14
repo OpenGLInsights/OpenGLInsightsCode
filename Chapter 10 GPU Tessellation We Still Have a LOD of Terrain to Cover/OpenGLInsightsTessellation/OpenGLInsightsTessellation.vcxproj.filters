@@ -1,0 +1,95 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Source Files\VSL">
+      <UniqueIdentifier>{a583fe43-df6e-45d7-a7f7-ccaf5741e26f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{35e1490a-dcf1-4c9e-ba07-b53c46dbdb09}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="terrainTessDemo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vsTerrainLODSingleScaledLib.cpp">
+      <Filter>Source Files\VSL</Filter>
+    </ClCompile>
+    <ClCompile Include="vsGLInfoLib.cpp">
+      <Filter>Source Files\VSL</Filter>
+    </ClCompile>
+    <ClCompile Include="vsLogLib.cpp">
+      <Filter>Source Files\VSL</Filter>
+    </ClCompile>
+    <ClCompile Include="vsMathLib.cpp">
+      <Filter>Source Files\VSL</Filter>
+    </ClCompile>
+    <ClCompile Include="vsResourceLib.cpp">
+      <Filter>Source Files\VSL</Filter>
+    </ClCompile>
+    <ClCompile Include="vsShaderLib.cpp">
+      <Filter>Source Files\VSL</Filter>
+    </ClCompile>
+    <ClCompile Include="vsTerrainLib.cpp">
+      <Filter>Source Files\VSL</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="vsGLInfoLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vslibs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vsLogLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vsMathLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vsResourceLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vsShaderLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vsTerrainLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vsTerrainLODSingleScaledLib.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="shaders\dirlightdiffambpix.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\dirlightdiffambpix.vert">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\terrainTessDemoSingleScaled.frag">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\terrainTessDemoSingleScaled.tesc">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\terrainTessDemoSingleScaled.tese">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shaders\terrainTessDemoSingleScaled.vert">
+      <Filter>Shaders</Filter>
+    </None>
+  </ItemGroup>
+</Project>
