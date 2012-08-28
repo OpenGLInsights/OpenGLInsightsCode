@@ -1,1 +1,1 @@
-http://spidergl.svn.sourceforge.net/viewvc/spidergl/
+https://github.com/dibenedetto/SpiderGL
