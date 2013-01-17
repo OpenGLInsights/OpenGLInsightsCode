@@ -11,8 +11,8 @@
 layout(size1x32) uniform readonly uimageBuffer offsets;
 layout(size4x32) uniform readonly imageBuffer data;
 #else
-layout(size1x32) uniform uimageBuffer restrict offsets;
-layout(size4x32) uniform imageBuffer restrict data;
+layout(size1x32) uniform uimageBuffer offsets;
+layout(size4x32) uniform imageBuffer data;
 layout(size1x32) uniform uimageBuffer fragIDs;
 #endif
 

@@ -3,17 +3,17 @@
 #extension GL_EXT_shader_image_load_store : enable
 
 #if LFB_READONLY
-layout(r32ui) uniform readonly uimageBuffer restrict headPtrs;
-layout(r32ui) uniform readonly uimageBuffer restrict nextPtrs;
-layout(r32ui) uniform readonly uimageBuffer restrict counts;
-layout(rgba32f) uniform readonly imageBuffer restrict data;
+layout(r32ui) uniform readonly uimageBuffer headPtrs;
+layout(r32ui) uniform readonly uimageBuffer nextPtrs;
+layout(r32ui) uniform readonly uimageBuffer counts;
+layout(rgba32f) uniform readonly imageBuffer data;
 #else
 layout(binding = 0, offset = 0) uniform atomic_uint allocOffset;
-layout(r32ui) coherent uniform uimageBuffer restrict headPtrs;
-layout(r32ui) uniform uimageBuffer restrict nextPtrs;
-layout(r32ui) coherent uniform uimageBuffer restrict counts;
-layout(r32ui) coherent uniform uimageBuffer restrict semaphores;
-layout(rgba32f) uniform imageBuffer restrict data;
+layout(r32ui) coherent uniform uimageBuffer headPtrs;
+layout(r32ui) uniform uimageBuffer nextPtrs;
+layout(r32ui) coherent uniform uimageBuffer counts;
+layout(r32ui) coherent uniform uimageBuffer semaphores;
+layout(rgba32f) uniform imageBuffer data;
 #endif
 
 uniform int fragAlloc;
