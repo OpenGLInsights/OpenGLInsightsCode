@@ -2,8 +2,8 @@
 
 #version 420
 
-layout(r32ui) uniform uimageBuffer restrict sums;
-layout(r32ui) writeonly uniform uimageBuffer restrict bs;
+layout(r32ui) uniform uimageBuffer  sums;
+layout(r32ui) writeonly uniform uimageBuffer bs;
 
 uniform int stepSize;
 uniform int pass;
