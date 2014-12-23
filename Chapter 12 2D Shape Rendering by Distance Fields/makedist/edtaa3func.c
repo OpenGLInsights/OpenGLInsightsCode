@@ -25,7 +25,7 @@
  * Updated in 2009 to handle anti-aliased edges,
  * as published in the article "Anti-aliased Euclidean
  * distance transform" by Stefan Gustavson and Robin Strand,
- * Pattern Recognition Letters 32 (2011) 252–257.
+ * Pattern Recognition Letters 32 (2011) 252â€“257.
  *
  * Updated in 2011 to avoid a corner case causing an
  * infinite loop for some input data.
@@ -33,20 +33,31 @@
 */
 
 /*
- Copyright (C) 2009-2011 Stefan Gustavson (stefan.gustavson@gmail.com)
 
-This program is free software; you can redistribute it and/or modify it
-under the terms of the GNU General Public License as published by the
-Free Software Foundation; either version 3 of the License, or (at your
-option) any later version.
+Copyright (C) 2011 by Stefan Gustavson
 
-This program is distributed in the hope that it will be useful, but WITHOUT
-ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
-FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License
-for more details.
+(stefan.gustavson@liu.se)
 
-The GNU General Public License is available on <http://www.gnu.org/licenses/>.
- */
+This code is distributed under the permissive "MIT license":
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
 
 /*
  * Compute the local gradient at edge pixels using convolution filters.
