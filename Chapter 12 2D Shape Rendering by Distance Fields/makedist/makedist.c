@@ -5,6 +5,8 @@
  * (nicolas.rougier@gmail.com), edited by Stefan
  * Gustavson (stefan.gustavson@gmail.com) to output
  * 16-bit distance data for better range and accuracy.
+ *
+ * Updated 2015-01-06 to fix a bug (height/width were swapped)
  */
 
 #include <stdlib.h>
@@ -178,8 +180,8 @@ make_distance_map( unsigned char *img, unsigned int width, unsigned int height )
     }
 
     // Transform background (outside contour, in areas of 0's)
-    computegradient( data, height, width, gx, gy);
-    edtaa3(data, gx, gy, height, width, xdist, ydist, outside);
+    computegradient( data, width, height, gx, gy);
+    edtaa3(data, gx, gy, width, height, xdist, ydist, outside);
     for( i=0; i<width*height; i++)
         if( outside[i] < 0.0 )
             outside[i] = 0.0;
@@ -189,8 +191,8 @@ make_distance_map( unsigned char *img, unsigned int width, unsigned int height )
     memset(gy, 0, sizeof(double)*width*height );
     for( i=0; i<width*height; i++)
         data[i] = 1 - data[i];
-    computegradient( data, height, width, gx, gy);
-    edtaa3(data, gx, gy, height, width, xdist, ydist, inside);
+    computegradient( data, width, height, gx, gy);
+    edtaa3(data, gx, gy, width, height, xdist, ydist, inside);
     for( i=0; i<width*height; i++)
         if( inside[i] < 0.0 )
             inside[i] = 0.0;
