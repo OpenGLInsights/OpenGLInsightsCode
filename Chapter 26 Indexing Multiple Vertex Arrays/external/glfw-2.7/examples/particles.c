@@ -4,7 +4,7 @@
 // projected on simple geometry).
 //
 // This demonstration generates a colorful fountain-like animation. It
-// uses several advanced OpenGL teqhniques:
+// uses several advanced OpenGL techniques:
 //
 //  1) Lighting (per vertex)
 //  2) Alpha blending
