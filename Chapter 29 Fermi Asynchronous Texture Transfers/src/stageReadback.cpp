@@ -51,7 +51,7 @@ StageReadback::init(const commandLineOptions *options)
 	}
 	glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, 0);
 	//generate fbo
-	glGenBuffers(1, &_fboID);
+	glGenFramebuffers(1, &_fboID);
 
 	if(glGetError() != GL_NO_ERROR)
 	{
@@ -168,7 +168,7 @@ StageReadback::execute(unsigned int stream)
 	element = _inQueue[0]->dequeue();
 	{
 		// got the texture, readback from texture to pbo
-		glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, _packPBOID[_pboIndex]); 
+		glBindBuffer(GL_PIXEL_PACK_BUFFER_ARB, _packPBOID[_pboIndex]);
 		//TODOCALIBRATION begin here
 		glBindTexture(GL_TEXTURE_2D, element->_id);
 		glGetTexImage(GL_TEXTURE_2D, 0, GL_RGBA, GL_UNSIGNED_BYTE, 0);
